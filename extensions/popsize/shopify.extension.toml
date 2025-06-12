@@ -1,0 +1,6 @@
+name = "popsize"
+type = "theme"
+handle = "popsize"
+version = "1.0.0"
+author = "Nicolas Micaux"
+description = "Popsize sizing widget – provide smart size recommendations and reduce returns."

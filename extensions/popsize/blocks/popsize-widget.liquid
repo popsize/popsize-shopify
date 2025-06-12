@@ -1,4 +1,4 @@
-{%- if shop.metafields.popsize.partner_id -%}
+{% if shop.metafields.popsize.partner_id %}
   <link rel="stylesheet" href="https://engine.popsize.ai/latest/static/css/main.latest.css" />
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -8,4 +8,12 @@
       document.body.appendChild(script);
     });
   </script>
-{%- endif -%}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Popsize Widget",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}

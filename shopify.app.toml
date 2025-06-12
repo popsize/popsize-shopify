@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://serving-prediction-duncan-dock.trycloudflare.com"
+application_url = "https://k-division-shed-likelihood.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://serving-prediction-duncan-dock.trycloudflare.com/auth/callback",
-  "https://serving-prediction-duncan-dock.trycloudflare.com/auth/shopify/callback",
-  "https://serving-prediction-duncan-dock.trycloudflare.com/api/auth/callback"
+  "https://k-division-shed-likelihood.trycloudflare.com/auth/callback",
+  "https://k-division-shed-likelihood.trycloudflare.com/auth/shopify/callback",
+  "https://k-division-shed-likelihood.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

@@ -4,3 +4,13 @@ handle = "popsize"
 version = "1.0.0"
 author = "Nicolas Micaux"
 description = "Popsize sizing widget – provide smart size recommendations and reduce returns."
+
+[[blocks]]
+name = "Popsize Widget"
+target = "product"
+source = "blocks/popsize-widget.liquid"
+
+[[blocks]]
+name = "Popsize Placement"
+target = "product"
+source = "blocks/popsize-placement.liquid"

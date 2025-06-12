@@ -10,6 +10,7 @@ import {
   Page,
   Text
 } from "@shopify/polaris";
+import React from "react";
 import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -79,11 +80,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Index() {
   const { partnerId, shopId } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
+  const [showSaved, setShowSaved] = React.useState(false);
 
-  // Show "Saved!" if the form was just submitted and succeeded
-  const showSaved =
-    fetcher.state === "idle" &&
-    fetcher.formData != null;
+  // Detect successful submit  (IS THAT WORKING?)
+  React.useEffect(() => {
+    if (fetcher.formData) {
+      setShowSaved(true);
+      // Optionally hide the message after a delay:
+      const timeout = setTimeout(() => setShowSaved(false), 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [fetcher.state, fetcher.formData]);
 
   return (
     <Page>

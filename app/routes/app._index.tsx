@@ -139,20 +139,21 @@ export default function Index() {
                   <li>Click <b>Customize</b> on your live theme.</li>
                   <li>In the theme editor, use the dropdown at the top to select <b>Products</b> &gt; <b>Default product</b>.</li>
                   <li>
-                    <b>To inject the widget in the head or footer of every product page:</b>
+                    <b>To inject the widget in every product page:</b>
                     <ul>
-                      <li>Click the <b>App embeds</b> icon (puzzle piece on the left).</li>
-                      <li>Enable <b>Popsize</b> and click <b>Save</b>.</li>
+                      <li>In the left panel, click <b>Add block</b> in <b>Header / Apps</b>.</li>
+                      <li>Select <b>Popsize Widget</b> from the list.</li>
                     </ul>
                   </li>
                   <li>
                     <b>To place the widget at a specific spot on the product page:</b>
                     <ul>
                       <li>In the left panel, click <b>Add block</b> where you want the widget to appear.</li>
-                      <li>Select <b>Popsize Placement</b> or <b>Popsize Widget</b> from the list.</li>
-                      <li>Drag to position as desired and click <b>Save</b>.</li>
+                      <li>Select <b>Popsize Placement</b>.</li>
+                      <li>You can move it to position as desired.</li>
                     </ul>
                   </li>
+                  <li>Click <b>Save</b> to apply changes.</li>
                 </ol>
                 <Text as="p" variant="bodySm">
                   <b>Tip:</b> Use the app embed for global injection (head/footer), or the placement block for precise placement on your product pages.

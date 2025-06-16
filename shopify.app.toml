@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://k-division-shed-likelihood.trycloudflare.com"
+application_url = "https://prior-jonathan-locally-covers.trycloudflare.com"
 embedded = true
 
 [build]
@@ -21,15 +21,19 @@ api_version = "2025-04"
   topics = [ "app/scopes_update" ]
   uri = "/webhooks/app/scopes_update"
 
+  [[webhooks.subscriptions]]
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+  uri = "pubsub://popsizeDB:shopify-compliance-webhooks"
+
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://k-division-shed-likelihood.trycloudflare.com/auth/callback",
-  "https://k-division-shed-likelihood.trycloudflare.com/auth/shopify/callback",
-  "https://k-division-shed-likelihood.trycloudflare.com/api/auth/callback"
+  "https://prior-jonathan-locally-covers.trycloudflare.com/auth/callback",
+  "https://prior-jonathan-locally-covers.trycloudflare.com/auth/shopify/callback",
+  "https://prior-jonathan-locally-covers.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

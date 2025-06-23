@@ -101,9 +101,6 @@ We welcome contributions! Please follow these steps:
 
 ### Common Tasks
 
-- **Test extension changes**:  
-  Run `shopify app dev` and use the theme editor in your dev store.
-
 - **Deploy extension**:  
   Run `shopify app deploy` to push changes to Shopify.
 

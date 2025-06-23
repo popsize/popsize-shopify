@@ -4,7 +4,6 @@ import { TitleBar } from "@shopify/app-bridge-react";
 import {
   BlockStack,
   Box,
-  Button,
   Card,
   Layout,
   Page,
@@ -110,6 +109,7 @@ export default function Index() {
                   </a>
                 </Box>
               )}
+              {/* 
               <fetcher.Form method="post">
                 <input type="hidden" name="shop_id" value={shopId} />
                 <label htmlFor="PARTNER_ID">Partner ID:</label>
@@ -130,6 +130,7 @@ export default function Index() {
                   Saved!
                 </Box>
               )}
+               */}
               <Box padding="400" background="bg-surface-secondary">
                 <Text as="h3" variant="headingSm" fontWeight="bold">
                   How to enable the widget on your product pages?

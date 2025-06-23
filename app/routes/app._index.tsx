@@ -1,10 +1,9 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
   BlockStack,
   Box,
-  Button,
   Card,
   Layout,
   Page,
@@ -21,6 +20,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     {
       shop {
         id
+        name
+        primaryDomain {
+          url
+        }
         metafield(namespace: "popsize", key: "partner_id") {
           value
         }
@@ -30,52 +33,109 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const json = await response.json();
   const partnerId = json.data.shop.metafield?.value || "";
+
+  // Parse shopId from Shopify GID (e.g., "gid://shopify/Shop/89315115344" => "89315115344")
   const shopId = json.data.shop.id;
+  const shortShopId = shopId.split("/").pop();
+
+  const shopName = json.data.shop.name;
+  const shopDomain = json.data.shop.primaryDomain?.url || "";
+
+  // Send create account request to backend API if not already done
+  if (!partnerId) {
+    const apiResponse = await fetch("https://popsize-api-b2b-1049592794130.europe-west9.run.app/partners/create_shopify_account/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        shop_id: shortShopId,
+        shop_domain: shopDomain,
+        shop_name: shopName,
+      }),
+    });
+
+    const apiJson = await apiResponse.json();
+    if (apiJson.status_code === 201 && apiJson.message === "Account created successfully.") {
+      // Set partner_id to "shopify:"+shopId
+      await admin.graphql(
+        `
+          mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
+            metafieldsSet(metafields: $metafields) {
+              metafields {
+                id
+                key
+                namespace
+                value
+              }
+              userErrors {
+                field
+                message
+              }
+            }
+          }
+        `,
+        {
+          variables: {
+            metafields: [
+              {
+                namespace: "popsize",
+                key: "partner_id",
+                type: "single_line_text_field",
+                value: `shopify:${shortShopId}`,
+                ownerId: shopId,
+              },
+            ],
+          },
+        }
+      );
+    }
+  }
 
   return { partnerId, shopId };
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const { admin } = await authenticate.admin(request);
-  const formData = await request.formData();
-  const partnerId = formData.get("partner_id");
-  const shopId = formData.get("shop_id"); // Get shopId from the form
+// export const action = async ({ request }: ActionFunctionArgs) => {
+//   const { admin } = await authenticate.admin(request);
+//   const formData = await request.formData();
+//   const partnerId = formData.get("partner_id");
+//   const shopId = formData.get("shop_id"); // Get shopId from the form
 
-  await admin.graphql(
-    `
-      mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
-        metafieldsSet(metafields: $metafields) {
-          metafields {
-            id
-            key
-            namespace
-            value
-          }
-          userErrors {
-            field
-            message
-          }
-        }
-      }
-    `,
-    {
-      variables: {
-        metafields: [
-          {
-            namespace: "popsize",
-            key: "partner_id",
-            type: "single_line_text_field",
-            value: partnerId,
-            ownerId: shopId, // Use the correct shop GID here
-          },
-        ],
-      },
-    }
-  );
+//   await admin.graphql(
+//     `
+//       mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
+//         metafieldsSet(metafields: $metafields) {
+//           metafields {
+//             id
+//             key
+//             namespace
+//             value
+//           }
+//           userErrors {
+//             field
+//             message
+//           }
+//         }
+//       }
+//     `,
+//     {
+//       variables: {
+//         metafields: [
+//           {
+//             namespace: "popsize",
+//             key: "partner_id",
+//             type: "single_line_text_field",
+//             value: partnerId,
+//             ownerId: shopId, // Use the correct shop GID here
+//           },
+//         ],
+//       },
+//     }
+//   );
 
-  return null;
-};
-
+//   return null;
+// };
 
 export default function Index() {
   const { partnerId, shopId } = useLoaderData<typeof loader>();
@@ -102,6 +162,7 @@ export default function Index() {
               <Text as="h2" variant="headingMd">
                 Popsize Sizing Widget – provide smart size recommendations and reduce returns.
               </Text>
+              {/* 
               {!partnerId && (
                 <Box background="bg-surface-warning" padding="400">
                   Please configure your Popsize account.{" "}
@@ -130,6 +191,7 @@ export default function Index() {
                   Saved!
                 </Box>
               )}
+              */}
               <Box padding="400" background="bg-surface-secondary">
                 <Text as="h3" variant="headingSm" fontWeight="bold">
                   How to enable the widget on your product pages?

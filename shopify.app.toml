@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://prior-jonathan-locally-covers.trycloudflare.com"
+application_url = "https://rand-tail-jewish-classification.trycloudflare.com"
 embedded = true
 
 [build]
@@ -23,7 +23,11 @@ api_version = "2025-04"
 
   [[webhooks.subscriptions]]
   compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
-  uri = "pubsub://popsizeDB:shopify-compliance-webhooks"
+  uri = "pubsub://popsizedb:shopify-compliance-webhooks"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app_subscriptions/update" ]
+  uri = "pubsub://popsizeb2b:shopify-subscription-change"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -31,9 +35,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://prior-jonathan-locally-covers.trycloudflare.com/auth/callback",
-  "https://prior-jonathan-locally-covers.trycloudflare.com/auth/shopify/callback",
-  "https://prior-jonathan-locally-covers.trycloudflare.com/api/auth/callback"
+  "https://rand-tail-jewish-classification.trycloudflare.com/auth/callback",
+  "https://rand-tail-jewish-classification.trycloudflare.com/auth/shopify/callback",
+  "https://rand-tail-jewish-classification.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

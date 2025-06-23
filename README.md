@@ -21,7 +21,7 @@ This repository contains a Shopify app (built with Remix) and a Shopify Theme Ap
 - **Node.js** (v18+ recommended): [Download here](https://nodejs.org/en/download/)
 - **Shopify Partner Account**: [Sign up](https://partners.shopify.com/signup)
 - **Development Store**: [Create one](https://shopify.dev/docs/apps/tools/cli/testing/development-stores)
-- **Shopify CLI**: [Install instructions](https://shopify.dev/docs/apps/tools/cli/installation)
+- **Shopify CLI**: [Install instructions](https://shopify.dev/docs/api/shopify-cli) (beware: install differs for macOS)
 
 ---
 

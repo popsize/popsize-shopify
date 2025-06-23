@@ -40,6 +40,8 @@ This repository contains a Shopify app (built with Remix) and a Shopify Theme Ap
 2. **Start local development**
 
    ```sh
+   npm run dev
+   # or
    shopify app dev
    ```
 
@@ -49,10 +51,6 @@ This repository contains a Shopify app (built with Remix) and a Shopify Theme Ap
 ---
 
 ## How to Test the Popsize Widget in a Store
-
-1. **Set your Partner ID**
-   - Open the app from your Shopify admin.
-   - Enter your Popsize Partner ID and click "Save".
 
 2. **Enable the widget on product pages**
    - Go to your [Shopify admin → Online Store → Themes](/admin/themes).

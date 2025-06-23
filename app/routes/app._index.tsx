@@ -1,5 +1,8 @@
+// Dashboard page to update Popsize Shopify app
+
+
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { redirect, useFetcher, useLoaderData } from "@remix-run/react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
   BlockStack,
@@ -15,7 +18,25 @@ import { authenticate } from "../shopify.server";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
 
-  // Fetch the partner_id metafield and shop id from the shop
+  // Check onboarding status
+  const onboardingResponseRaw = await admin.graphql(`
+    {
+      shop {
+        metafield(namespace: "popsize", key: "onboarding_completed") {
+          value
+        }
+      }
+    }
+  `);
+
+  const onboardingResponse = await onboardingResponseRaw.json(); // ✅ important
+  const onboardingDone = onboardingResponse.data.shop.metafield?.value === "true";
+
+  if (!onboardingDone) {
+    return redirect("/app/onboarding");
+  }
+
+  // Continue normal dashboard loader
   const response = await admin.graphql(`
     {
       shop {
@@ -38,7 +59,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
   const formData = await request.formData();
   const partnerId = formData.get("partner_id");
-  const shopId = formData.get("shop_id"); // Get shopId from the form
+  const shopId = formData.get("shop_id");
 
   await admin.graphql(
     `
@@ -65,7 +86,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             key: "partner_id",
             type: "single_line_text_field",
             value: partnerId,
-            ownerId: shopId, // Use the correct shop GID here
+            ownerId: shopId,
           },
         ],
       },
@@ -75,17 +96,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return null;
 };
 
-
 export default function Index() {
   const { partnerId, shopId } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
   const [showSaved, setShowSaved] = React.useState(false);
 
-  // Detect successful submit  (IS THAT WORKING?)
   React.useEffect(() => {
     if (fetcher.formData) {
       setShowSaved(true);
-      // Optionally hide the message after a delay:
       const timeout = setTimeout(() => setShowSaved(false), 2000);
       return () => clearTimeout(timeout);
     }
@@ -93,7 +111,7 @@ export default function Index() {
 
   return (
     <Page>
-      <TitleBar title="Popsize Sizing Widget" />
+      <TitleBar title="Popsize - AI Sizing Recommendation tool" />
       <Layout>
         <Layout.Section>
           <Card>
@@ -109,28 +127,6 @@ export default function Index() {
                   </a>
                 </Box>
               )}
-              {/* 
-              <fetcher.Form method="post">
-                <input type="hidden" name="shop_id" value={shopId} />
-                <label htmlFor="PARTNER_ID">Partner ID:</label>
-                <input
-                  type="text"
-                  name="partner_id"
-                  id="PARTNER_ID"
-                  defaultValue={partnerId}
-                  required
-                  style={{ marginRight: 8 }}
-                />
-                <Button submit>
-                  Save
-                </Button>
-              </fetcher.Form>
-              {showSaved && (
-                <Box padding="200">
-                  Saved!
-                </Box>
-              )}
-               */}
               <Box padding="400" background="bg-surface-secondary">
                 <Text as="h3" variant="headingSm" fontWeight="bold">
                   How to enable the widget on your product pages?

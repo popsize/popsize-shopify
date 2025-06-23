@@ -5,6 +5,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import i18n from "./translations/i18n";
 
 export default function App() {
   return (

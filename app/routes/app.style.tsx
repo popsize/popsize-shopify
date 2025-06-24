@@ -48,7 +48,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect("/app");
 };
 
-export default function Onboarding() {
+export default function Style() {
   //const [language, setLanguage] = useState("English");
   const [widgetSize, setWidgetSize] = useState("Medium");
   const { t } = useTranslation();
@@ -74,14 +74,6 @@ export default function Onboarding() {
 
   return (
     <Page fullWidth>
-      <div style={{ padding: '54px 30px 0 30px', marginBottom: '50px', alignItems: 'center', textAlign: 'center' }}>
-        <Text variant="heading2xl" as="h1" tone="base">
-          {t('welcome_title')}
-        </Text>
-        <Text variant="bodyLg" as="p" tone="success">
-          {t('welcome_subtitle')}
-        </Text>
-      </div>
       <Layout>
         <Layout.Section>
           <LegacyCard>
@@ -97,11 +89,6 @@ export default function Onboarding() {
 
               {/* Right: form */}
               <div style={{ flex: 1 }}>
-                {/*<div style={{ marginBottom: '16px' }}>
-                  <Text variant="headingLg" as="h1">
-                    {t('welcome_title')}
-                  </Text>
-                </div>*/}
                 <div style={{ marginBottom: '16px' }}>
                   <Text as="p">
                     {t('setup_description')}

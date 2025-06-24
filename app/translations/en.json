@@ -12,9 +12,11 @@
   "widget_style_subtext": "Choose the style of your sizing widget",
   "billing_title": "Subscriptions & Pricing",
   "billing_redirecting": "Redirecting to pricing plans...",
-  "navmenu_setup": "Set up",
+  "navmenu_widget": "Widget",
   "navmenu_home": "Home",
   "navmenu_billing": "Billing",
   "navmenu_configure": "Configure",
-  "navmenu_help": "Help"
+  "navmenu_help": "Help",
+  "tab_setup": "Language & Style",
+  "tab_advanced": "Widget settings"
 }

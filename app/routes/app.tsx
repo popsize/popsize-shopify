@@ -26,7 +26,7 @@ function NavigationMenu() {
 
   return (
     <NavMenu>
-      <Link to="/app/onboarding">{t("navmenu_setup")}</Link>
+      <Link to="/app/widget">{t("navmenu_widget")}</Link>
       <Link to="/app" rel="home">{t("navmenu_home")}</Link>
       <Link to="/app/billing">{t("navmenu_billing")}</Link>
       <Link to="/app/settings">{t("navmenu_configure")}</Link>

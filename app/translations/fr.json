@@ -12,9 +12,11 @@
   "widget_style_subtext": "Choisissez le style de votre widget",
   "billing_title": "Abonnements & Tarifs",
   "billing_redirecting": "Redirection vers les plans tarifaires en cours...",
-  "navmenu_setup": "Installation",
+  "navmenu_widget": "Widget",
   "navmenu_home": "Accueil",
   "navmenu_billing": "Abonnements",
   "navmenu_configure": "Paramètres",
-  "navmenu_help": "Aide"
+  "navmenu_help": "Aide",
+  "tab_setup": "Langue & Style",
+  "tab_advanced": "Paramètres du widget"
 }

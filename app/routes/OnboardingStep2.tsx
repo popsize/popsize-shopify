@@ -1,35 +1,88 @@
-// app/routes/OnboardingStep2.tsx
+/* TO-DO: implement the widget embedding
 
-import { Box, Button, Layout, Text, Image } from "@shopify/polaris";
+Continue button: make it inactive until, either: we successfully checked the widget is embedded (not sure it's possible)
+or the user has clicked on the "Embed" button
+
+Embed button should head the user to its store to embed <Popsize>*/
+
+
+
+import { MediaCard, Button, Box, Text } from "@shopify/polaris";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 
-const imageUrl = "https://link-to-your-illustration.png";
+const OnboardingStep2: FC<{ onNext: () => void; onBack?: () => void }> = ({
+  onNext,
+  onBack,
+}) => {
 
-const OnboardingStep2: FC<{ onNext: () => void }> = ({ onNext }) => (
-  <Layout>
-    <Layout.Section oneHalf>
-      <Image source={imageUrl} alt="Step 1" />
-    </Layout.Section>
-    <Layout.Section oneHalf>
-      <Box padding="400">
-        <Text variant="headingMd" as="p">Enable app embed as</Text>
-        <Text as="p">
-          App embed is required for Popsize to work correctly in your store.
-        </Text>
-        <ol>
-          <li>Click on the button below to open the editor</li>
-          <li>Enable “Popsize Widget” under App embeds</li>
-          <li>Click <b>Save</b> in the theme editor</li>
-        </ol>
-        <Button primary onClick={() => window.open('/admin/themes/current/editor?context=apps')}>
-          Enable app embed
+  const { t } = useTranslation();
+
+  return (
+    <div style={{ padding: 20 }}>
+      <MediaCard
+        title={t('step2_title')}
+        // @ts-ignore
+        description={
+          <>
+            <Text as="p" tone="subdued">
+              {t('step2_subtitle')}
+            </Text>
+            <Box paddingBlockStart="200">
+              <ol style={{ paddingLeft: 16 }}>
+                <li>{t('step2_step1')}</li>
+                <li>{t('step2_step2')}</li>
+                <li>{t('step2_step3_part1')}<b>{t('step2_step3_part2')}</b>{t('step2_step3_part3')}</li>
+              </ol>
+            </Box>
+          </>
+        }
+        primaryAction={{
+          content: t('step_1_button'),
+          onAction: () =>
+            window.open("/admin/themes/current/editor?context=apps", "_blank"),
+        }}
+      >
+        {/*<img
+          alt="Illustration of Popsize widget activation"
+          width="100%"
+          height="100%"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
+          src="/images/shopping.png"
+        />*/}
+        <img
+          alt="Animated walkthrough of widget activation"
+          src="/videos/Recording-PopsizePlacement.gif"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+            borderRadius: 4,
+          }}
+        />
+      </MediaCard>
+
+      {/* Navigation buttons */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: 20,
+        }}
+      >
+        <Button onClick={onBack} disabled={!onBack}>
+          {t('back')}
         </Button>
-        <Box paddingBlockStart="400">
-          <Button onClick={onNext}>Continue</Button>
-        </Box>
-      </Box>
-    </Layout.Section>
-  </Layout>
-);
+        <Button variant="primary" onClick={onNext}>
+          {t('finish')}
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 export default OnboardingStep2;

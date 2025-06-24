@@ -8,19 +8,19 @@ import {
   Button,
 } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
-import OnboardingStep1 from "./onboardingstep1";
+import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
-
-const TOTAL_STEPS = 4;
-const STEP_LABELS = [
-  "Intégration de l'application",
-  "Installer les widgets",
-  "Marque",
-  "Délai de demande",
-];
+import { useTranslation } from "react-i18next";
 
 export default function OnboardingWizard() {
   const [step, setStep] = useState(1);
+  const { t } = useTranslation();
+
+  const TOTAL_STEPS = 4;
+  const STEP_LABELS = [
+    t('onboarding_step1'),
+    t('onboarding_step2')
+  ];
 
   const handleNext = () => {
     if (step < TOTAL_STEPS) setStep(step + 1);
@@ -94,7 +94,13 @@ export default function OnboardingWizard() {
                     </div>
                     <Text
                       variant="bodySm"
-                      tone={isActive ? "base" : "disabled"}
+                      tone={
+                        isCompleted
+                          ? "disabled"
+                          : isActive
+                          ? "subdued" // valid tone
+                          : "base"
+                      }
                       as="p"
                       // @ts-ignore
                       style={{ whiteSpace: "nowrap" }}
@@ -109,7 +115,7 @@ export default function OnboardingWizard() {
                       style={{
                         height: 2,
                         width: 40,
-                        backgroundColor: step > stepNumber ? "#008060" : "#D9D9D9",
+                        backgroundColor: step > stepNumber ? "#EBEBF2" : "#001234",
                         margin: "0 12px",
                         flexShrink: 0,
                       }}

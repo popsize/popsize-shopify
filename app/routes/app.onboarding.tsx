@@ -74,6 +74,14 @@ export default function Onboarding() {
 
   return (
     <Page fullWidth>
+      <div style={{ padding: '54px 30px 0 30px', marginBottom: '50px', alignItems: 'center', textAlign: 'center' }}>
+        <Text variant="heading2xl" as="h1" tone="base">
+          {t('welcome_title')}
+        </Text>
+        <Text variant="bodyLg" tone="success">
+          The most advanced AI sizing tool
+        </Text>
+      </div>
       <Layout>
         <Layout.Section>
           <LegacyCard>
@@ -89,11 +97,11 @@ export default function Onboarding() {
 
               {/* Right: form */}
               <div style={{ flex: 1 }}>
-                <div style={{ marginBottom: '16px' }}>
+                {/*<div style={{ marginBottom: '16px' }}>
                   <Text variant="headingLg" as="h1">
                     {t('welcome_title')}
                   </Text>
-                </div>
+                </div>*/}
                 <div style={{ marginBottom: '16px' }}>
                   <Text as="p">
                     {t('setup_description')}

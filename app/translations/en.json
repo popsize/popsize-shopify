@@ -1,7 +1,7 @@
 {
   "welcome_title": "Welcome to Popsize 👋",
   "setup_description": "Let’s set up your sizing widget. Just a few steps to go.",
-  "setup_button": "Set up",
+  "save_button": "Save",
   "change_later_note": "You can change these settings later in your dashboard.",
   "my_size_short": "My size",
   "my_size_long": "Find your perfect size with ",

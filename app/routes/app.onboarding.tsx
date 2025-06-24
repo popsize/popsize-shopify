@@ -64,11 +64,11 @@ export default function Onboarding() {
     //display: 'inline-block',
     display: 'flex',
     flexGrow: 0,
-    border: widgetSize === size ? '1px solid #FFAA00' : '1px solid #001234',
+    border: widgetSize === size ? '1px solid #FFD073' : '1px solid transparent',
     borderRadius: '0px',
-    padding: '0px 12px',
+    padding: '12px 12px',
     cursor: 'pointer',
-    backgroundColor: widgetSize === size ? '#FFFCF7' : '#F7FAFF',
+    backgroundColor: widgetSize === size ? 'transparent' : 'transparent',
     justifyContent: 'center',
   });
 
@@ -146,7 +146,7 @@ export default function Onboarding() {
                       {/* Optional: Add a fourth box */}
                     </div>
                     <Button submit variant="primary">
-                      {t('setup_button')}
+                      {t('save_button')}
                     </Button>
                   </FormLayout>
                 </Form>

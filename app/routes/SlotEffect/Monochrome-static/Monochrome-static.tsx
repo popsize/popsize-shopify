@@ -11,7 +11,7 @@ const MonochromeStatic = () => {
           <div className="slot-item static-s">S</div>
         </div>
         &nbsp;
-        <span className="tagline-text-small-static underline" style={{ fontSize: '12px', textDecoration: 'underline' }}>
+        <span className="tagline-text-small-static underline" style={{ fontSize: '10px', textDecoration: 'underline' }}>
           {t('my_size_short')}
         </span>
       </span>

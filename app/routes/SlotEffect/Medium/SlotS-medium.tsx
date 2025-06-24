@@ -25,6 +25,11 @@ const SlotSMedium = () => {
   useEffect(() => {
     const slotTrack = slotTrackRef.current;
     if (!slotTrack) return;
+
+    const staticS = document.createElement('div');
+    staticS.className = 'slot-item final-s';
+    staticS.textContent = 'S';
+    slotTrack.appendChild(staticS);
   
     const runAnimation = () => {
       if (!slotTrackRef.current) return;
@@ -73,7 +78,7 @@ const SlotSMedium = () => {
     };
   
     // Start initial animation after 1 second
-    const timeout = setTimeout(runAnimation, 0);
+    const timeout = setTimeout(runAnimation, 10000);
   
     return () => clearTimeout(timeout); // Cleanup on unmount
   }, []);
@@ -86,7 +91,7 @@ const SlotSMedium = () => {
         <div className="slot-medium">
           <div className="slot-track" ref={slotTrackRef}></div>
         </div>&nbsp;
-        <span className="tagline-text-small underline" style={{ fontSize: '16px' }}>{t('my_size_short')}</span>
+        <span className="tagline-text-medium underline" style={{ fontSize: '14px' }}>{t('my_size_short')}</span>
       </span>
     </div>
   </div>

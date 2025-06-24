@@ -1,7 +1,7 @@
 {
   "welcome_title": "Bienvenue chez Popsize 👋",
   "setup_description": "Configurons ensemble votre widget.",
-  "setup_button": "Confirmer",
+  "save_button": "Enregistrer",
   "change_later_note": "Vous pourrez modifier ces paramètres plus tard dans votre tableau de bord.",
   "my_size_short": "Ma taille",
   "my_size_long": "Trouver ma taille avec ",

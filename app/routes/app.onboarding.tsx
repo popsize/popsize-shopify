@@ -109,6 +109,7 @@ export default function Onboarding() {
                       onChange={handleLanguageChange}
                     />
 
+                    {/* TO-DO : capture the widget size*/}
                     {/* Widget Size Selection */}
                     <div style={{ marginTop: '24px' }}>
                      <Text variant="bodyMd" fontWeight="bold" as="p">

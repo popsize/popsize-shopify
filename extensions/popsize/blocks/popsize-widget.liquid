@@ -7,6 +7,12 @@
       script.setAttribute("data-partner-id", "{{ shop.metafields.popsize.partner_id }}");
       document.body.appendChild(script);
     });
+    /*
+    {% if customer %}
+      console.log("Customer email: {{ customer.email }}");
+      console.log("Customer ID: {{ customer.id }}");
+    {% endif %}
+    */
   </script>
 {% endif %}
 

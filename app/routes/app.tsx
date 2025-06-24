@@ -1,7 +1,7 @@
 // routes/tabs for our app/dashboard
 
 import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import { Link, Outlet, redirect, useLoaderData, useLocation, useRouteError } from "@remix-run/react";
 import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
@@ -11,24 +11,70 @@ import { authenticate } from "../shopify.server";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+/*export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
 
   return { apiKey: process.env.SHOPIFY_API_KEY || "" };
+};*/
+
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { admin } = await authenticate.admin(request);
+
+  const response = await admin.graphql(`
+    {
+      shop {
+        metafield(namespace: "popsize", key: "onboarding_completed") {
+          value
+        }
+      }
+    }
+  `);
+
+  const json = await response.json();
+  const onboardingDone = json.data.shop.metafield?.value === "true";
+  
+  const url = new URL(request.url);
+  const currentPath = url.pathname;
+
+  // ✅ Prevent infinite loop
+  if (!onboardingDone && currentPath !== "/app/onboarding") {
+    return redirect("/app/onboarding");
+  }
+
+  // ✅ Force redirect if onboarding not done
+  /*if (!onboardingDone) {
+    return redirect("/app/onboarding");
+  }*/
+
+  console.log("👉 Onboarding metafield value:", json.data.shop.metafield?.value);
+
+  return {
+    apiKey: process.env.SHOPIFY_API_KEY || "",
+    onboardingDone,
+  };
 };
 
 export default function App() {
-  const { apiKey } = useLoaderData<typeof loader>();
+  const { apiKey, onboardingDone } = useLoaderData<typeof loader>();
+  const location = useLocation(); // ✅ get current path
+  const isOnboardingPage = location.pathname === "/app/onboarding";
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <NavMenu>
-        <Link to="/app" rel="home">Home</Link>
-        <Link to="/app/billing">Billing</Link>
-        <Link to="/app/settings">Settings</Link>
-        <Link to="/app/help">Help</Link>
+        {onboardingDone ? (
+          <>
+            <Link to="/app" rel="home">Home</Link>
+            <Link to="/app/billing">Billing</Link>
+            <Link to="/app/settings">Settings</Link>
+            <Link to="/app/help">Help</Link>
+          </>
+        ) : (
+          <Link to="/app/onboarding">Setup</Link>
+        )}
       </NavMenu>
-      <Outlet />
+      {(onboardingDone || isOnboardingPage) && <Outlet />}
     </AppProvider>
   );
 }

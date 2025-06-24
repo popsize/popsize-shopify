@@ -20,17 +20,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   // Check onboarding status
   const onboardingResponseRaw = await admin.graphql(`
-    {
-      shop {
-        metafield(namespace: "popsize", key: "onboarding_completed") {
-          value
-        }
+  {
+    shop {
+      metafield(namespace: "popsize", key: "onboarding_completed") {
+        value
       }
     }
-  `);
+  }
+`);
 
-  const onboardingResponse = await onboardingResponseRaw.json(); // ✅ important
-  const onboardingDone = onboardingResponse.data.shop.metafield?.value === "true";
+const onboardingResponse = await onboardingResponseRaw.json(); // ✅ important
+const onboardingDone = onboardingResponse.data.shop.metafield?.value === "true";
 
   if (!onboardingDone) {
     return redirect("/app/onboarding");

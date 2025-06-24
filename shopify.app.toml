@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://prisoners-my-buses-abu.trycloudflare.com"
+application_url = "https://navigation-mit-hook-picture.trycloudflare.com"
 embedded = true
 
 [build]
@@ -34,7 +34,7 @@ api_version = "2025-04"
 scopes = "write_products"
 
 [auth]
-redirect_urls = ["https://prisoners-my-buses-abu.trycloudflare.com/auth/callback", "https://prisoners-my-buses-abu.trycloudflare.com/auth/shopify/callback", "https://prisoners-my-buses-abu.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://navigation-mit-hook-picture.trycloudflare.com/auth/callback", "https://navigation-mit-hook-picture.trycloudflare.com/auth/shopify/callback", "https://navigation-mit-hook-picture.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

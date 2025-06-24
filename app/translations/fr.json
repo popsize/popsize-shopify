@@ -1,9 +1,12 @@
 {
   "welcome_title": "Bienvenue chez Popsize 👋",
-  "setup_description": "Configurons votre widget de taille. Encore quelques étapes.",
-  "settings_language": "Langue des paramètres",
-  "setup_button": "Configurer",
+  "setup_description": "Configurons ensemble votre widget.",
+  "setup_button": "Confirmer",
   "change_later_note": "Vous pourrez modifier ces paramètres plus tard dans votre tableau de bord.",
   "my_size_short": "Ma taille",
-  "my_size_long": "Trouver ma taille avec  "
+  "my_size_long": "Trouver ma taille avec  ",
+  "settings_language": "Langue des paramètres",
+  "settings_language_subtext": "Choisissez la langue de votre tableau de bord",
+  "widget_style_label": "Style du widget",
+  "widget_style_subtext": "Choisissez le style de votre widget"
 }

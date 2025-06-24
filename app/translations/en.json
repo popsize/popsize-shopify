@@ -1,9 +1,12 @@
 {
   "welcome_title": "Welcome to Popsize 👋",
   "setup_description": "Let’s set up your sizing widget. Just a few steps to go.",
-  "settings_language": "Settings language",
   "setup_button": "Set up",
   "change_later_note": "You can change these settings later in your dashboard.",
   "my_size_short": "My size",
-  "my_size_long": "Find your perfect size with "
+  "my_size_long": "Find your perfect size with ",
+  "settings_language": "Settings language",
+  "settings_language_subtext": "Choose the language for your dashboard",
+  "widget_style_label": "Widget style",
+  "widget_style_subtext": "Choose the style of your sizing widget"
 }

@@ -2,11 +2,11 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect, Form } from "@remix-run/react";
 import { Page, Layout, Select, Button, Text, FormLayout, LegacyCard } from "@shopify/polaris";
 import { useState } from "react";
-import { authenticate } from "../shopify.server";
-import SlotSLarge from "./SlotEffect/Large/SlotS-large";
-import SlotSMedium from "./SlotEffect/Medium/SlotS-medium";
-import SlotSSmall from "./SlotEffect/Small/SlotS-small";
-import MonochromeStatic from "./SlotEffect/Monochrome-static/Monochrome-static";
+import { authenticate } from "../../shopify.server";
+import SlotSLarge from "../SlotEffect/Large/SlotS-large";
+import SlotSMedium from "../SlotEffect/Medium/SlotS-medium";
+import SlotSSmall from "../SlotEffect/Small/SlotS-small";
+import MonochromeStatic from "../SlotEffect/Monochrome-static/Monochrome-static";
 import { useTranslation } from 'react-i18next';
 import i18n from "app/translations/i18n";
 

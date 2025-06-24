@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import './SlotS-medium.css';
+import { useTranslation } from 'react-i18next';
 
 const sizes = [
   'XS', 'S', 'M', 'L', 'XL',
@@ -12,6 +13,7 @@ const itemHeight = 40;
 
 const SlotSMedium = () => {
   const slotTrackRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const shuffle = (array: string[]) => {
     return array
@@ -84,7 +86,7 @@ const SlotSMedium = () => {
         <div className="slot-medium">
           <div className="slot-track" ref={slotTrackRef}></div>
         </div>&nbsp;
-        <span className="tagline-text-small underline" style={{ fontSize: '16px' }}>My size</span>
+        <span className="tagline-text-small underline" style={{ fontSize: '16px' }}>{t('my_size_short')}</span>
       </span>
     </div>
   </div>

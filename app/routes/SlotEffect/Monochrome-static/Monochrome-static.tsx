@@ -1,6 +1,9 @@
 import './Monochrome-static.css';
+import { useTranslation } from 'react-i18next';
 
 const MonochromeStatic = () => {
+  const { t } = useTranslation();
+  
   return (
     <div className="tagline-static">
       <span className="tagline-brand-static">
@@ -9,7 +12,7 @@ const MonochromeStatic = () => {
         </div>
         &nbsp;
         <span className="tagline-text-small-static underline" style={{ fontSize: '12px', textDecoration: 'underline' }}>
-          My size
+          {t('my_size_short')}
         </span>
       </span>
     </div>

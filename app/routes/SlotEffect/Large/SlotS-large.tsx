@@ -2,8 +2,6 @@ import { useEffect, useRef } from 'react';
 import './SlotS-large.css';
 import { useTranslation } from 'react-i18next';
 
-const { t } = useTranslation();
-
 const sizes = [
   'XS', 'S', 'M', 'L', 'XL',
   '32', '34', '36', '38', '40', '42',
@@ -15,6 +13,7 @@ const itemHeight = 40;
 
 const SlotSLarge = () => {
   const slotTrackRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const shuffle = (array: string[]) => {
     return array

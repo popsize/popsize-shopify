@@ -1,5 +1,6 @@
 {
   "welcome_title": "Bienvenue chez Popsize 👋",
+  "welcome_subtitle": "La meilleure recommandation de taille, grâce à l'IA",
   "setup_description": "Configurons ensemble votre widget.",
   "save_button": "Enregistrer",
   "change_later_note": "Vous pourrez modifier ces paramètres plus tard dans votre tableau de bord.",
@@ -8,5 +9,12 @@
   "settings_language": "Langue des paramètres",
   "settings_language_subtext": "Choisissez la langue de votre tableau de bord",
   "widget_style_label": "Style du widget",
-  "widget_style_subtext": "Choisissez le style de votre widget"
+  "widget_style_subtext": "Choisissez le style de votre widget",
+  "billing_title": "Abonnements & Tarifs",
+  "billing_redirecting": "Redirection vers les plans tarifaires en cours...",
+  "navmenu_setup": "Installation",
+  "navmenu_home": "Accueil",
+  "navmenu_billing": "Abonnements",
+  "navmenu_configure": "Paramètres",
+  "navmenu_help": "Aide"
 }

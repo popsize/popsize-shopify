@@ -1,5 +1,6 @@
 {
   "welcome_title": "Welcome to Popsize 👋",
+  "welcome_subtitle": "The most advanced AI sizing tool",
   "setup_description": "Let’s set up your sizing widget. Just a few steps to go.",
   "save_button": "Save",
   "change_later_note": "You can change these settings later in your dashboard.",
@@ -8,5 +9,12 @@
   "settings_language": "Settings language",
   "settings_language_subtext": "Choose the language for your dashboard",
   "widget_style_label": "Widget style",
-  "widget_style_subtext": "Choose the style of your sizing widget"
+  "widget_style_subtext": "Choose the style of your sizing widget",
+  "billing_title": "Subscriptions & Pricing",
+  "billing_redirecting": "Redirecting to pricing plans...",
+  "navmenu_setup": "Set up",
+  "navmenu_home": "Home",
+  "navmenu_billing": "Billing",
+  "navmenu_configure": "Configure",
+  "navmenu_help": "Help"
 }

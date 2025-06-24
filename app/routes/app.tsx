@@ -8,6 +8,8 @@ import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { boundary } from "@shopify/shopify-app-remix/server";
 
 import { authenticate } from "../shopify.server";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -19,18 +21,26 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   };
 };
 
+function NavigationMenu() {
+  const { t } = useTranslation();
+
+  return (
+    <NavMenu>
+      <Link to="/app/onboarding">{t("navmenu_setup")}</Link>
+      <Link to="/app" rel="home">{t("navmenu_home")}</Link>
+      <Link to="/app/billing">{t("navmenu_billing")}</Link>
+      <Link to="/app/settings">{t("navmenu_configure")}</Link>
+      <Link to="/app/help">{t("navmenu_help")}</Link>
+    </NavMenu>
+  );
+}
+
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
-      <NavMenu>
-        <Link to="/app/onboarding">Set up</Link>
-        <Link to="/app" rel="home">Home</Link>
-        <Link to="/app/billing">Billing</Link>
-        <Link to="/app/settings">Configure</Link>
-        <Link to="/app/help">Help</Link>
-      </NavMenu>
+      <NavigationMenu />
       <Outlet />
     </AppProvider>
   );

@@ -78,8 +78,8 @@ export default function Onboarding() {
         <Text variant="heading2xl" as="h1" tone="base">
           {t('welcome_title')}
         </Text>
-        <Text variant="bodyLg" tone="success">
-          The most advanced AI sizing tool
+        <Text variant="bodyLg" as="p" tone="success">
+          {t('welcome_subtitle')}
         </Text>
       </div>
       <Layout>

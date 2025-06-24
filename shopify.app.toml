@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://mortgage-trusts-couples-memories.trycloudflare.com"
+application_url = "https://sight-worried-critics-sparc.trycloudflare.com"
 embedded = true
 
 [build]
@@ -34,7 +34,7 @@ api_version = "2025-04"
 scopes = "write_products"
 
 [auth]
-redirect_urls = ["https://mortgage-trusts-couples-memories.trycloudflare.com/auth/callback", "https://mortgage-trusts-couples-memories.trycloudflare.com/auth/shopify/callback", "https://mortgage-trusts-couples-memories.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://sight-worried-critics-sparc.trycloudflare.com/auth/callback", "https://sight-worried-critics-sparc.trycloudflare.com/auth/shopify/callback", "https://sight-worried-critics-sparc.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

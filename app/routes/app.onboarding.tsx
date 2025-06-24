@@ -9,9 +9,16 @@ import SlotSSmall from "./SlotEffect/Small/SlotS-small";
 import MonochromeStatic from "./SlotEffect/Monochrome-static/Monochrome-static";
 import { useTranslation } from 'react-i18next';
 import i18n from "app/translations/i18n";
+import { useLocation } from "@remix-run/react";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { admin } = await authenticate.admin(request);
+  const formData = await request.formData();
+  const { admin, session } = await authenticate.admin(request); // ✅ contains shop
+  const shop = session.shop;
+
+  if (!shop) throw new Error("Missing shop in session");
+
+  //const { admin } = await authenticate.admin(request); // ✅ no second argument
 
   const response = await admin.graphql(`
     {
@@ -46,6 +53,7 @@ export default function Onboarding() {
   const [widgetSize, setWidgetSize] = useState("Medium");
   const { t } = useTranslation();
   const [language, setLanguage] = useState(i18n.language === 'fr' ? 'Français' : 'English');
+  const location = useLocation();
 
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
@@ -57,7 +65,7 @@ export default function Onboarding() {
     display: 'flex',
     flexGrow: 0,
     border: widgetSize === size ? '1px solid #FFAA00' : '1px solid #001234',
-    borderRadius: '50px',
+    borderRadius: '0px',
     padding: '0px 12px',
     cursor: 'pointer',
     backgroundColor: widgetSize === size ? '#FFFCF7' : '#F7FAFF',
@@ -92,6 +100,8 @@ export default function Onboarding() {
                   </Text>
                 </div>
                 <Form method="post">
+                  {/*<input type="hidden" name="shop" value={new URLSearchParams(location.search).get("shop") ?? ""} />*/}
+                  <input type="hidden" name="widget_size" value={widgetSize} />
                   <FormLayout>
                     <div style={{ marginBottom: '0px' }}>
                       <Text variant="bodyMd" fontWeight="bold" as="p">

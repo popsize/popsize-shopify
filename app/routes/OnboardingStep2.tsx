@@ -32,6 +32,21 @@ const OnboardingStep2: FC<{ onNext: () => void; onBack?: () => void }> = ({
     setHasClickedEmbed(true);
   };
 
+  const handleContinue = async () => {
+    const shop = new URLSearchParams(window.location.search).get("shop");
+    if (!shop) {
+      console.error("Shop parameter missing.");
+      return;
+    }
+
+    try {
+      await fetch(`/api/set-widget-placement?shop=${shop}`, { method: "POST" });
+      onNext();
+    } catch (err) {
+      console.error("Failed to save placement metafield:", err);
+    }
+  };
+
   return (
     <div style={{ padding: 20 }}>
       <MediaCard
@@ -85,7 +100,7 @@ const OnboardingStep2: FC<{ onNext: () => void; onBack?: () => void }> = ({
         </Button>
         <Button
           variant="primary"
-          onClick={onNext}
+          onClick={handleContinue}
           disabled={!hasClickedEmbed}
         >
           {t("continue")}

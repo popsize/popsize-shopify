@@ -46,5 +46,8 @@
   "step_3_button": "Choisir un abonnement",
   "continue": "Continuer",
   "back": "Retour",
-  "finish": "Terminer"
+  "finish": "Terminer",
+  "onboarding_complete_title": "🎉 Tout est prêt !",
+  "onboarding_complete_subtitle": "Popsize est entièrement configuré pour votre boutique, et vos clients peuvent désormais profiter de recommandations de tailles précises grâce à l’IA 😊"
+
 }

@@ -10,10 +10,51 @@ import { useTranslation } from "react-i18next";
 import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
 import OnboardingStep3 from "./OnboardingStep3";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { authenticate } from "../shopify.server";
+import { useLoaderData } from "@remix-run/react";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { admin } = await authenticate.admin(request);
+
+  const response = await admin.graphql(`
+    {
+      shop {
+        widgetIntegration: metafield(namespace: "popsize", key: "widget_integration") {
+          value
+        }
+        widgetPlacement: metafield(namespace: "popsize", key: "widget_placement") {
+          value
+        }
+        billing: metafield(namespace: "popsize", key: "billing") {
+          value
+        }
+      }
+    }
+  `);
+
+  const result = await response.json();
+
+  const widgetIntegration = result.data.shop.widgetIntegration?.value === "true";
+  const widgetPlacement = result.data.shop.widgetPlacement?.value === "true";
+  const billing = result.data.shop.billing?.value === "true";
+
+
+  let initialStep = 1;
+  if (billing) initialStep = 4;
+  else if (widgetIntegration && widgetPlacement) initialStep = 3;
+  else if (widgetIntegration) initialStep = 2;
+
+  return json({ initialStep, billing });
+};
 
 export default function OnboardingWizard() {
-  const [step, setStep] = useState(1);
+  //const [step, setStep] = useState(1);
+  //const { widgetIntegration } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
+  const { initialStep, billing } = useLoaderData<typeof loader>();
+  const [step, setStep] = useState(initialStep);
 
   const TOTAL_STEPS = 3;
   const STEP_LABELS = [
@@ -32,9 +73,20 @@ export default function OnboardingWizard() {
 
   return (
     <Page fullWidth>
-      <TitleBar title="Popsize Setup Wizard" />
+      <TitleBar title="Popsize" />
       <Card>
           <Box padding="400">
+            {billing ? (
+          <div style={{ textAlign: "center", padding: "40px 0" }}>
+            <Text variant="headingLg" as="h2">
+              🎉 {t("onboarding_complete_title", "You're all set!")}
+            </Text>
+            <Text tone="subdued" as="p" style={{ marginTop: 12 }}>
+              {t("onboarding_complete_subtitle", "Popsize is now fully configured for your store.")}
+            </Text>
+          </div>
+        ) : (
+          <>
             <div
             style={{
               display: "flex",
@@ -111,26 +163,29 @@ export default function OnboardingWizard() {
 
                   {/* Line (after group, not inside) */}
                   {index < STEP_LABELS.length - 1 && (
-                    <div
-                      style={{
-                        height: 2,
-                        width: 40,
-                        backgroundColor: step > stepNumber ? "#EBEBF2" : "#001234",
-                        margin: "0 12px",
-                        flexShrink: 0,
-                      }}
-                    />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          </Box>
+                      <div
+                        style={{
+                          height: 2,
+                          width: 40,
+                          backgroundColor: step > stepNumber ? "#EBEBF2" : "#001234",
+                          margin: "0 12px",
+                          flexShrink: 0,
+                        }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          
         {/* Onboarding steps */}
         {step === 1 && <OnboardingStep1 onNext={handleNext} />}
         {step === 2 && <OnboardingStep2 onNext={handleNext} onBack={handleBack} />}
         {step === 3 && <OnboardingStep3 onNext={handleNext} onBack={handleBack} />}
         {/* Add your OnboardingStep3 and 4 similarly */}
+        </>
+        )}
+        </Box>
       </Card>
     </Page>
   );

@@ -7,7 +7,28 @@ import SlotSLarge from "./SlotEffect/Large/SlotS-large";
 import SlotSMedium from "./SlotEffect/Medium/SlotS-medium";
 import MonochromeStatic from "./SlotEffect/Monochrome-static/Monochrome-static";
 import SlotSSmall from "./SlotEffect/Small/SlotS-small";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { authenticate } from "app/shopify.server";
+import { useLoaderData } from "@remix-run/react";
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { admin } = await authenticate.admin(request);
+
+  const response = await admin.graphql(`
+    {
+      shop {
+        widgetStyle: metafield(namespace: "popsize", key: "widget_style") {
+          value
+        }
+      }
+    }
+  `);
+
+  const result = await response.json();
+  const isWidgetStyleSet = !!result?.data?.shop?.widgetStyle?.value;
+
+  return json({ isWidgetStyleSet });
+};
 
 export default function Style() {
   //const [language, setLanguage] = useState("English");
@@ -15,11 +36,20 @@ export default function Style() {
   const { t } = useTranslation();
   const [language, setLanguage] = useState(i18n.language === 'fr' ? 'Français' : 'English');
   const location = useLocation();
+  const data = useLoaderData<typeof loader>() || {};
+  const [isWidgetStyleSet, setIsWidgetStyleSet] = useState<boolean>(data.isWidgetStyleSet ?? false);
+
 
   const handleLanguageChange = (value: string) => {
-    setLanguage(value);
-    i18n.changeLanguage(value === 'Français' ? 'fr' : 'en');
-  };
+  setLanguage(value);
+  setIsWidgetStyleSet(false); // ⬅️ force "Save" button to appear again
+  i18n.changeLanguage(value === 'Français' ? 'fr' : 'en');
+};
+
+const handleWidgetSizeChange = (size: string) => {
+  setWidgetSize(size);
+  setIsWidgetStyleSet(false); // ⬅️ same here
+};
 
   const boxStyle = (size: string): React.CSSProperties => ({
     //display: 'inline-block',
@@ -86,22 +116,38 @@ export default function Style() {
                     </div>
                     <input type="hidden" name="widget_size" value={widgetSize} />
                     <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
-                      <div onClick={() => setWidgetSize("monochrome")} style={boxStyle("monochrome")}>
+                      <div onClick={() => handleWidgetSizeChange("monochrome")} style={boxStyle("monochrome")}>
                         <MonochromeStatic />
                       </div>
-                      <div onClick={() => setWidgetSize("small")} style={boxStyle("small")}>
+                      <div onClick={() => handleWidgetSizeChange("small")} style={boxStyle("small")}>
                         <SlotSSmall />
                       </div>
-                      <div onClick={() => setWidgetSize("medium")} style={boxStyle("medium")}>
+                      <div onClick={() => handleWidgetSizeChange("medium")} style={boxStyle("medium")}>
                         <SlotSMedium />
                       </div>
-                      <div onClick={() => setWidgetSize("large")} style={boxStyle("large")}>
+                      <div onClick={() => handleWidgetSizeChange("large")} style={boxStyle("large")}>
                         <SlotSLarge />
                       </div>
                       {/* Optional: Add a fourth box */}
                     </div>
-                    <Button submit variant="primary">
-                      {t('save_button')}
+                    <Button
+                      variant={isWidgetStyleSet ? "secondary" : "primary"}
+                      disabled={isWidgetStyleSet}
+                      onClick={async () => {
+                        const shop = new URLSearchParams(location.search).get("shop");
+                        if (!shop) return;
+
+                        const res = await fetch(`/api/set-widget-style?shop=${shop}`, {
+                          method: "POST",
+                        });
+
+                        const data = await res.json();
+                        if (data.success) {
+                          setIsWidgetStyleSet(true);
+                        }
+                      }}
+                    >
+                      {isWidgetStyleSet ? t('saved_button') : t('save_button')}
                     </Button>
                   </FormLayout>
                 </Form>

@@ -1,0 +1,42 @@
+/* Remove gradient overlay effects if desired */
+.slot-small-static {
+  height: 40px;
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+/* Static S style */
+.static-s {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-family: 'mendl-sans-dawn', sans-serif;
+  font-weight: 400;
+  color: #000000; /* navy tone for monochrome */
+}
+
+.tagline-static {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+.tagline-text-small-static {
+  font-weight: 700;
+  color: #000000;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
+.tagline-brand-static {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  white-space: nowrap;     /* prevent text from wrapping */
+  flex-shrink: 0; 
+}

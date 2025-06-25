@@ -1,169 +1,192 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
-  BlockStack,
   Box,
   Card,
-  Layout,
   Page,
-  Text
+  Text,
 } from "@shopify/polaris";
-import React from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import OnboardingStep1 from "./OnboardingStep1";
+import OnboardingStep2 from "./OnboardingStep2";
+import OnboardingStep3 from "./OnboardingStep3";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
+import { useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
 
-  // Fetch the partner_id metafield and shop id from the shop
   const response = await admin.graphql(`
     {
       shop {
-        id
-        metafield(namespace: "popsize", key: "partner_id") {
+        widgetIntegration: metafield(namespace: "popsize", key: "widget_integration") {
+          value
+        }
+        widgetPlacement: metafield(namespace: "popsize", key: "widget_placement") {
+          value
+        }
+        billing: metafield(namespace: "popsize", key: "billing") {
           value
         }
       }
     }
   `);
 
-  const json = await response.json();
-  const partnerId = json.data.shop.metafield?.value || "";
-  const shopId = json.data.shop.id;
+  const result = await response.json();
 
-  return { partnerId, shopId };
+  const widgetIntegration = result.data.shop.widgetIntegration?.value === "true";
+  const widgetPlacement = result.data.shop.widgetPlacement?.value === "true";
+  const billing = result.data.shop.billing?.value === "true";
+
+
+  let initialStep = 1;
+  if (billing) initialStep = 4;
+  else if (widgetIntegration && widgetPlacement) initialStep = 3;
+  else if (widgetIntegration) initialStep = 2;
+
+  return json({ initialStep, billing });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const { admin } = await authenticate.admin(request);
-  const formData = await request.formData();
-  const partnerId = formData.get("partner_id");
-  const shopId = formData.get("shop_id"); // Get shopId from the form
+export default function OnboardingWizard() {
+  //const [step, setStep] = useState(1);
+  //const { widgetIntegration } = useLoaderData<typeof loader>();
+  const { t } = useTranslation();
+  const { initialStep, billing } = useLoaderData<typeof loader>();
+  const [step, setStep] = useState(initialStep);
 
-  await admin.graphql(
-    `
-      mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
-        metafieldsSet(metafields: $metafields) {
-          metafields {
-            id
-            key
-            namespace
-            value
-          }
-          userErrors {
-            field
-            message
-          }
-        }
-      }
-    `,
-    {
-      variables: {
-        metafields: [
-          {
-            namespace: "popsize",
-            key: "partner_id",
-            type: "single_line_text_field",
-            value: partnerId,
-            ownerId: shopId, // Use the correct shop GID here
-          },
-        ],
-      },
-    }
-  );
+  const TOTAL_STEPS = 3;
+  const STEP_LABELS = [
+    t('onboarding_step1'),
+    t('onboarding_step2'),
+    t('onboarding_step3')
+  ];
 
-  return null;
-};
+  const handleNext = () => {
+    if (step < TOTAL_STEPS) setStep(step + 1);
+  };
 
-
-export default function Index() {
-  const { partnerId, shopId } = useLoaderData<typeof loader>();
-  const fetcher = useFetcher();
-  const [showSaved, setShowSaved] = React.useState(false);
-
-  // Detect successful submit  (IS THAT WORKING?)
-  React.useEffect(() => {
-    if (fetcher.formData) {
-      setShowSaved(true);
-      // Optionally hide the message after a delay:
-      const timeout = setTimeout(() => setShowSaved(false), 2000);
-      return () => clearTimeout(timeout);
-    }
-  }, [fetcher.state, fetcher.formData]);
+  const handleBack = () => {
+    if (step > 1) setStep(step - 1);
+  };
 
   return (
-    <Page>
-      <TitleBar title="Popsize Sizing Widget" />
-      <Layout>
-        <Layout.Section>
-          <Card>
-            <BlockStack gap="400">
-              <Text as="h2" variant="headingMd">
-                Popsize Sizing Widget – provide smart size recommendations and reduce returns.
-              </Text>
-              {!partnerId && (
-                <Box background="bg-surface-warning" padding="400">
-                  Please configure your Popsize account.{" "}
-                  <a href="https://partners.popsize.ai" target="_blank" rel="noopener noreferrer">
-                    Click here
-                  </a>
-                </Box>
-              )}
-              {/* 
-              <fetcher.Form method="post">
-                <input type="hidden" name="shop_id" value={shopId} />
-                <label htmlFor="PARTNER_ID">Partner ID:</label>
-                <input
-                  type="text"
-                  name="partner_id"
-                  id="PARTNER_ID"
-                  defaultValue={partnerId}
-                  required
-                  style={{ marginRight: 8 }}
-                />
-                <Button submit>
-                  Save
-                </Button>
-              </fetcher.Form>
-              {showSaved && (
-                <Box padding="200">
-                  Saved!
-                </Box>
-              )}
-               */}
-              <Box padding="400" background="bg-surface-secondary">
-                <Text as="h3" variant="headingSm" fontWeight="bold">
-                  How to enable the widget on your product pages?
-                </Text>
-                <ol style={{ marginTop: 12, marginBottom: 12, paddingLeft: 24 }}>
-                  <li>Go to your Shopify admin → Online Store → Themes.</li>
-                  <li>Click <b>Customize</b> on your live theme.</li>
-                  <li>In the theme editor, use the dropdown at the top to select <b>Products</b> &gt; <b>Default product</b>.</li>
-                  <li>
-                    <b>To inject the widget in every product page:</b>
-                    <ul>
-                      <li>In the left panel, click <b>Add block</b> in <b>Header / Apps</b>.</li>
-                      <li>Select <b>Popsize Widget</b> from the list.</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <b>To place the widget at a specific spot on the product page:</b>
-                    <ul>
-                      <li>In the left panel, click <b>Add block</b> where you want the widget to appear.</li>
-                      <li>Select <b>Popsize Placement</b>.</li>
-                      <li>You can move it to position as desired.</li>
-                    </ul>
-                  </li>
-                  <li>Click <b>Save</b> to apply changes.</li>
-                </ol>
-                <Text as="p" variant="bodySm">
-                  <b>Tip:</b> Use the app embed for global injection (head/footer), or the placement block for precise placement on your product pages.
-                </Text>
-              </Box>
-            </BlockStack>
-          </Card>
-        </Layout.Section>
-      </Layout>
+    <Page fullWidth>
+      <TitleBar title="Popsize" />
+      <Card>
+          <Box padding="400">
+            {billing ? (
+          <div style={{ textAlign: "center", padding: "40px 0" }}>
+            <Text variant="headingLg" as="h2">
+              {t("onboarding_complete_title", "You're all set!")}
+            </Text>
+            <Text tone="subdued" as="p" style={{ marginTop: 12 }}>
+              {t("onboarding_complete_subtitle", "Popsize is now fully configured for your store.")}
+            </Text>
+          </div>
+        ) : (
+          <>
+            <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 40,
+              width: "100%",
+            }}
+          >
+            {STEP_LABELS.map((label, index) => {
+              const stepNumber = index + 1;
+              const isCompleted = step > stepNumber;
+              const isActive = step === stepNumber;
+
+              return (
+                <div key={index} style={{ display: "flex", alignItems: "center" }}>
+                  {/* Group: Circle + Label */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      //minWidth: 150, // Ensures spacing consistency
+                      paddingRight: index < STEP_LABELS.length - 1 ? 12 : 0,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: "50%",
+                        backgroundColor: isCompleted
+                          ? "#001234"
+                          : isActive
+                          ? "#FFFCF7"
+                          : "#EBEBF2",
+                        border: `1px solid ${
+                            isCompleted
+                              ? "transparent"
+                              : isActive
+                              ? "#FFAA00"
+                              : "#ADADB2"
+                          }`,
+                        color: isCompleted
+                          ? "#F7FAFF"
+                          : isActive
+                          ? "#FFAA00"
+                          : "#ADADB2",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {stepNumber}
+                    </div>
+                    <Text
+                      variant="bodySm"
+                      tone={
+                        isCompleted
+                          ? "disabled"
+                          : isActive
+                          ? "subdued" // valid tone
+                          : "base"
+                      }
+                      as="p"
+                      // @ts-ignore
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      {label}
+                    </Text>
+                  </div>
+
+                  {/* Line (after group, not inside) */}
+                  {index < STEP_LABELS.length - 1 && (
+                      <div
+                        style={{
+                          height: 2,
+                          width: 40,
+                          backgroundColor: step > stepNumber ? "#EBEBF2" : "#001234",
+                          margin: "0 12px",
+                          flexShrink: 0,
+                        }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          
+        {/* Onboarding steps */}
+        {step === 1 && <OnboardingStep1 onNext={handleNext} />}
+        {step === 2 && <OnboardingStep2 onNext={handleNext} onBack={handleBack} />}
+        {step === 3 && <OnboardingStep3 onNext={handleNext} onBack={handleBack} />}
+        {/* Add your OnboardingStep3 and 4 similarly */}
+        </>
+        )}
+        </Box>
+      </Card>
     </Page>
   );
 }

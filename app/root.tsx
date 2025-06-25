@@ -5,6 +5,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import i18n from "./translations/i18n";
+import { I18nextProvider } from "react-i18next";
 
 export default function App() {
   return (
@@ -21,7 +23,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <I18nextProvider i18n={i18n}>
+          <Outlet />
+        </I18nextProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

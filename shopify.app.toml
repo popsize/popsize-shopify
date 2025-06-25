@@ -3,23 +3,23 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://rand-tail-jewish-classification.trycloudflare.com"
+application_url = "https://shopify.popsize.ai"
 embedded = true
 
 [build]
 include_config_on_deploy = true
-automatically_update_urls_on_dev = true
+automatically_update_urls_on_dev = false
 
 [webhooks]
 api_version = "2025-04"
 
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
-  uri = "/webhooks/app/uninstalled"
+  uri = "https://shopify.popsize.ai/webhooks/app/uninstalled"
 
   [[webhooks.subscriptions]]
   topics = [ "app/scopes_update" ]
-  uri = "/webhooks/app/scopes_update"
+  uri = "https://shopify.popsize.ai/webhooks/app/scopes_update"
 
   [[webhooks.subscriptions]]
   compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
@@ -31,14 +31,10 @@ api_version = "2025-04"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = ""
 
 [auth]
-redirect_urls = [
-  "https://rand-tail-jewish-classification.trycloudflare.com/auth/callback",
-  "https://rand-tail-jewish-classification.trycloudflare.com/auth/shopify/callback",
-  "https://rand-tail-jewish-classification.trycloudflare.com/api/auth/callback"
-]
+redirect_urls = ["https://shopify.popsize.ai/auth/callback", "https://shopify.popsize.ai/auth/shopify/callback", "https://shopify.popsize.ai/api/auth/callback"]
 
 [pos]
 embedded = false

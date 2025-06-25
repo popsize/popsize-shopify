@@ -11,9 +11,10 @@ import { MediaCard, Button, Box, Text } from "@shopify/polaris";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
+const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void; onComplete: () => void; }> = ({
   onNext,
   onBack,
+  onComplete
 }) => {
 
   const { t } = useTranslation();
@@ -41,8 +42,12 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
     }
 
     try {
-      await fetch(`/api/set-widget-billing?shop=${shop}`, { method: "POST" });
-      onNext();
+      const res = await fetch(`/api/set-widget-billing?shop=${shop}`, { method: "POST" });
+      if (res.ok) {
+        onComplete(); // ✅ trigger local billingState update
+      } else {
+        console.error("Non-200 response from billing endpoint");
+      }
     } catch (err) {
       console.error("Failed to save billing metafield:", err);
     }

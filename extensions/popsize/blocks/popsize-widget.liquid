@@ -5,6 +5,9 @@
       var script = document.createElement("script");
       script.src = "https://engine.popsize.ai/latest/static/js/main.latest.js";
       script.setAttribute("data-partner-id", "shopify:{{ shop.id }}");
+      {% if shop.metafields.popsize.ui_size %}
+        script.setAttribute("data-ui-size", "{{ shop.metafields.popsize.ui_size }}");
+      {% endif %}
       document.body.appendChild(script);
     });
   </script>

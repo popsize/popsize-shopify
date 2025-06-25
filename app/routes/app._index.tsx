@@ -79,7 +79,7 @@ export default function OnboardingWizard() {
             {billing ? (
           <div style={{ textAlign: "center", padding: "40px 0" }}>
             <Text variant="headingLg" as="h2">
-              🎉 {t("onboarding_complete_title", "You're all set!")}
+              {t("onboarding_complete_title", "You're all set!")}
             </Text>
             <Text tone="subdued" as="p" style={{ marginTop: 12 }}>
               {t("onboarding_complete_subtitle", "Popsize is now fully configured for your store.")}

@@ -111,7 +111,7 @@ gcloud builds submit --tag gcr.io/popsizeshopify/app-backend
 gcloud run deploy app-backend \
   --image gcr.io/popsizeshopify/app-backend \
   --platform managed \
-  --region europe-west9 \
+  --region europe-west1 \
   --allow-unauthenticated
 ```
 

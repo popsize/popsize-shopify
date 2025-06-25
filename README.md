@@ -104,6 +104,17 @@ We welcome contributions! Please follow these steps:
 - **Deploy extension**:  
   Run `shopify app deploy` to push changes to Shopify.
 
+- **Deploy backend**:
+```bash
+gcloud config set project popsizeshopify
+gcloud builds submit --tag gcr.io/popsizeshopify/app-backend
+gcloud run deploy app-backend \
+  --image gcr.io/popsizeshopify/app-backend \
+  --platform managed \
+  --region europe-west9 \
+  --allow-unauthenticated
+```
+
 ---
 
 ## Resources

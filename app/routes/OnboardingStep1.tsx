@@ -62,8 +62,9 @@ const OnboardingStep1: FC<{ onNext: () => void; onBack?: () => void }> = ({
           src="https://storage.googleapis.com/popsize-shopify-images/Recording-PopsizeWidget.gif"
           style={{
             width: "100%",
-            height: "100%",
-            objectFit: "cover",
+            //height: "100%",
+            //objectFit: "cover",
+            height: 'auto',
             objectPosition: "center",
             borderRadius: 4,
           }}

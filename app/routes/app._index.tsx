@@ -31,7 +31,54 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const partnerId = json.data.shop.metafield?.value || "";
   const shopId = json.data.shop.id;
 
-  return { partnerId, shopId };
+  // 1. Get all themes and find the published (main) theme
+  const themeResp = await admin.graphql(`
+    {
+      themes(first: 10) {
+        edges {
+          node {
+            id
+            name
+            role
+          }
+        }
+      }
+    }
+  `);
+  const themeJson = await themeResp.json();
+  const mainTheme = themeJson.data.themes.edges.find(
+    (edge: any) => edge.node.role === "MAIN"
+  );
+  const themeId = mainTheme?.node.id;
+
+  let widgetInstalled = false;
+  if (themeId) {
+    // 2. Get product template and check for popsize-widget block
+    const templateResp = await admin.graphql(`
+      {
+        theme(id: "${themeId}") {
+          template(name: "product") {
+            sections {
+              name
+              blocks {
+                type
+              }
+            }
+          }
+        }
+      }
+    `);
+    const templateJson = await templateResp.json();
+    const sections = templateJson.data.theme?.template?.sections || [];
+    for (const section of sections) {
+      if (section.blocks?.some((block: any) => block.type === "popsize-widget")) {
+        widgetInstalled = true;
+        break;
+      }
+    }
+  }
+
+  return { partnerId, shopId, widgetInstalled };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -77,7 +124,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 
 export default function Index() {
-  const { partnerId, shopId } = useLoaderData<typeof loader>();
+  const { partnerId, shopId, widgetInstalled } = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
   const [showSaved, setShowSaved] = React.useState(false);
 
@@ -107,6 +154,11 @@ export default function Index() {
                   <a href="https://partners.popsize.ai" target="_blank" rel="noopener noreferrer">
                     Click here
                   </a>
+                </Box>
+              )}
+              {!widgetInstalled && (
+                <Box background="bg-surface-warning" padding="400">
+                  Please add the Popsize widget to your product page in your theme. See instructions below.
                 </Box>
               )}
               {/* 

@@ -99,22 +99,6 @@ We welcome contributions! Please follow these steps:
 7. **Follow the PR template** to describe your changes and any relevant context.
 8. **Wait for review**: We will review your PR and provide feedback or merge it.
 
-### Common Tasks
-
-- **Deploy extension**:  
-  Run `shopify app deploy` to push changes to Shopify.
-
-- **Deploy backend**:
-```bash
-gcloud config set project popsizeshopify
-gcloud builds submit --tag gcr.io/popsizeshopify/app-backend
-gcloud run deploy app-backend \
-  --image gcr.io/popsizeshopify/app-backend \
-  --platform managed \
-  --region europe-west1 \
-  --allow-unauthenticated
-```
-
 ---
 
 ## Resources
@@ -132,4 +116,18 @@ AGPL 3.0 License. See [LICENSE](LICENSE) for details.
 
 ---
 
-**Happy contributing!**
+## Deployment (for internal Popsize team members ONLY)
+
+- **Deploy extension**:  
+  Run `shopify app deploy` to push changes to Shopify.
+
+- **Deploy backend**:
+```bash
+gcloud config set project popsizeshopify
+gcloud builds submit --tag gcr.io/popsizeshopify/app-backend
+gcloud run deploy app-backend \
+  --image gcr.io/popsizeshopify/app-backend \
+  --platform managed \
+  --region europe-west1 \
+  --allow-unauthenticated
+```

@@ -11,15 +11,17 @@ import { TitleBar } from "@shopify/app-bridge-react";
 import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
 import { useTranslation } from "react-i18next";
+import OnboardingStep3 from "./OnboardingStep3";
 
 export default function OnboardingWizard() {
   const [step, setStep] = useState(1);
   const { t } = useTranslation();
 
-  const TOTAL_STEPS = 4;
+  const TOTAL_STEPS = 3;
   const STEP_LABELS = [
     t('onboarding_step1'),
-    t('onboarding_step2')
+    t('onboarding_step2'),
+    t('onboarding_step3')
   ];
 
   const handleNext = () => {
@@ -129,6 +131,7 @@ export default function OnboardingWizard() {
         {/* Onboarding steps */}
         {step === 1 && <OnboardingStep1 onNext={handleNext} />}
         {step === 2 && <OnboardingStep2 onNext={handleNext} onBack={handleBack} />}
+        {step === 3 && <OnboardingStep3 onNext={handleNext} onBack={handleBack} />}
         {/* Add your OnboardingStep3 and 4 similarly */}
       </Card>
     </Page>

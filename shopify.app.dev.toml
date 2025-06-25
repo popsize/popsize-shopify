@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://honor-undertake-observations-bay.trycloudflare.com"
+application_url = "https://eliminate-registered-plus-minimum.trycloudflare.com"
 embedded = true
 
 [build]
@@ -34,11 +34,7 @@ api_version = "2025-04"
 scopes = ""
 
 [auth]
-redirect_urls = [
-  "https://honor-undertake-observations-bay.trycloudflare.com/auth/callback",
-  "https://honor-undertake-observations-bay.trycloudflare.com/auth/shopify/callback",
-  "https://honor-undertake-observations-bay.trycloudflare.com/api/auth/callback"
-]
+redirect_urls = ["https://eliminate-registered-plus-minimum.trycloudflare.com/auth/callback", "https://eliminate-registered-plus-minimum.trycloudflare.com/auth/shopify/callback", "https://eliminate-registered-plus-minimum.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

@@ -1,84 +1,13 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
-import { Form, redirect, useLocation } from "@remix-run/react";
+import { Form, useLocation } from "@remix-run/react";
 import { Button, FormLayout, Layout, LegacyCard, Page, Select, Text } from "@shopify/polaris";
 import i18n from "app/translations/i18n";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
-import { authenticate } from "../shopify.server";
 import SlotSLarge from "./SlotEffect/Large/SlotS-large";
 import SlotSMedium from "./SlotEffect/Medium/SlotS-medium";
 import MonochromeStatic from "./SlotEffect/Monochrome-static/Monochrome-static";
 import SlotSSmall from "./SlotEffect/Small/SlotS-small";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  const { admin, session } = await authenticate.admin(request); // ✅ contains shop
-  const shop = session.shop;
-
-  if (!shop) throw new Error("Missing shop in session");
-
-  const response = await admin.graphql(`
-    {
-      shop {
-        id
-      }
-    }
-  `);
-  const result = await response.json();
-  const shopId = result.data.shop.id;
-
-  // Save onboarding_completed
-  await admin.graphql(`
-    mutation {
-      metafieldsSet(metafields: [{
-        namespace: "popsize",
-        key: "onboarding_completed",
-        type: "single_line_text_field",
-        value: "true",
-        ownerId: "${shopId}"
-      }]) {
-        metafields { id }
-        userErrors { message }
-      }
-    }
-  `);
-
-  // Save widget_size as ui_size metafield
-  const widgetSize = formData.get("widget_size") || "medium";
-  await admin.graphql(
-    `
-      mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
-        metafieldsSet(metafields: $metafields) {
-          metafields {
-            id
-            key
-            namespace
-            value
-          }
-          userErrors {
-            field
-            message
-          }
-        }
-      }
-    `,
-    {
-      variables: {
-        metafields: [
-          {
-            namespace: "popsize",
-            key: "ui_size",
-            type: "single_line_text_field",
-            value: widgetSize,
-            ownerId: shopId,
-          },
-        ],
-      },
-    }
-  );
-
-  return redirect("/app");
-};
 
 export default function Style() {
   //const [language, setLanguage] = useState("English");
@@ -146,7 +75,6 @@ export default function Style() {
                       onChange={handleLanguageChange}
                     />
 
-                    {/* TO-DO : capture the widget size*/}
                     {/* Widget Size Selection */}
                     <div style={{ marginTop: '24px' }}>
                      <Text variant="bodyMd" fontWeight="bold" as="p">

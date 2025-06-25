@@ -20,17 +20,32 @@ const OnboardingStep1: FC<{ onNext: () => void; onBack?: () => void }> = ({
   const [hasClickedEmbed, setHasClickedEmbed] = useState(false);
 
   const handleOpenThemeEditor = () => {
-  const shop = new URLSearchParams(window.location.search).get("shop");
+    const shop = new URLSearchParams(window.location.search).get("shop");
 
-  if (!shop) {
-    console.error("Shop parameter missing in URL.");
-    return;
-  }
+    if (!shop) {
+      console.error("Shop parameter missing in URL.");
+      return;
+    }
 
-  const url = `https://${shop}/admin/themes/current/editor?section=header`;
-  window.open(url, "_blank");
-  setHasClickedEmbed(true);
-};
+    const url = `https://${shop}/admin/themes/current/editor?section=header`;
+    window.open(url, "_blank");
+    setHasClickedEmbed(true);
+  };
+
+  const handleContinue = async () => {
+    const shop = new URLSearchParams(window.location.search).get("shop");
+    if (!shop) {
+      console.error("Shop parameter missing.");
+      return;
+    }
+
+    try {
+      await fetch(`/api/set-widget-integration?shop=${shop}`, { method: "POST" });
+      onNext();
+    } catch (err) {
+      console.error("Failed to save metafield:", err);
+    }
+  };
 
   return (
     <div style={{ padding: 20 }}>
@@ -84,7 +99,8 @@ const OnboardingStep1: FC<{ onNext: () => void; onBack?: () => void }> = ({
         </Button>
         <Button
           variant="primary"
-          onClick={onNext}
+          //onClick={onNext}
+          onClick={handleContinue}
           disabled={!hasClickedEmbed}
         >
           {t("continue")}

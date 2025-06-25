@@ -19,20 +19,36 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
   const { t } = useTranslation();
   const [hasClickedEmbed, setHasClickedEmbed] = useState(false);
   
-    const handleOpenThemeEditor = () => {
-  const shop = new URLSearchParams(window.location.search).get("shop");
+  const handleOpenThemeEditor = () => {
+    const shop = new URLSearchParams(window.location.search).get("shop");
 
-  if (!shop) {
-    console.error("Shop parameter missing in URL.");
-    return;
-  }
+    if (!shop) {
+      console.error("Shop parameter missing in URL.");
+      return;
+    }
 
-  const storeHandle = shop.split(".")[0]; // extract 'popsize-test-boutique' from full shop domain
-  const url = `https://admin.shopify.com/store/${storeHandle}/charges/popsize/pricing_plans`;
+    const storeHandle = shop.split(".")[0]; // extract 'popsize-test-boutique' from full shop domain
+    const url = `https://admin.shopify.com/store/${storeHandle}/charges/popsize/pricing_plans`;
 
-  window.open(url, "_blank");
-  setHasClickedEmbed(true);
-};
+    window.open(url, "_blank");
+    setHasClickedEmbed(true);
+  };
+
+  const handleFinish = async () => {
+    const shop = new URLSearchParams(window.location.search).get("shop");
+
+    if (!shop) {
+      console.error("Shop parameter missing.");
+      return;
+    }
+
+    try {
+      await fetch(`/api/set-widget-billing?shop=${shop}`, { method: "POST" });
+      onNext();
+    } catch (err) {
+      console.error("Failed to save billing metafield:", err);
+    }
+  };
 
   return (
     <div style={{ padding: 20 }}>
@@ -86,7 +102,7 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
         </Button>
         <Button
           variant="primary"
-          onClick={onNext}
+          onClick={handleFinish}
           disabled={!hasClickedEmbed}
         >
           {t("finish")}

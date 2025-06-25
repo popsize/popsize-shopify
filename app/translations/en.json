@@ -46,5 +46,7 @@
   "step_3_button": "Select a plan",
   "continue": "Continue",
   "back": "Back",
-  "finish": "Finish"
+  "finish": "Finish",
+  "onboarding_complete_title": "🎉 You are all set!",
+  "onboarding_complete_subtitle": "Popsize is fully configured for your store, and your customers can now enjoy precise size recommendations, with AI 😊"
 }

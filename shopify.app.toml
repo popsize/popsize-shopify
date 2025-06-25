@@ -3,23 +3,23 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://ppm-chains-arrival-president.trycloudflare.com"
+application_url = "https://app-backend-503388092768.europe-west9.run.app"
 embedded = true
 
 [build]
 include_config_on_deploy = true
-automatically_update_urls_on_dev = true
+automatically_update_urls_on_dev = false
 
 [webhooks]
 api_version = "2025-04"
 
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
-  uri = "/webhooks/app/uninstalled"
+  uri = "https://app-backend-503388092768.europe-west9.run.app/webhooks/app/uninstalled"
 
   [[webhooks.subscriptions]]
   topics = [ "app/scopes_update" ]
-  uri = "/webhooks/app/scopes_update"
+  uri = "https://app-backend-503388092768.europe-west9.run.app/webhooks/app/scopes_update"
 
   [[webhooks.subscriptions]]
   compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
@@ -34,7 +34,7 @@ api_version = "2025-04"
 scopes = ""
 
 [auth]
-redirect_urls = ["https://ppm-chains-arrival-president.trycloudflare.com/auth/callback", "https://ppm-chains-arrival-president.trycloudflare.com/auth/shopify/callback", "https://ppm-chains-arrival-president.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://app-backend-503388092768.europe-west9.run.app/auth/callback", "https://app-backend-503388092768.europe-west9.run.app/auth/shopify/callback", "https://app-backend-503388092768.europe-west9.run.app/api/auth/callback"]
 
 [pos]
 embedded = false

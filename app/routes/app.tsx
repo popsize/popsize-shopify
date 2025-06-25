@@ -29,8 +29,8 @@ function NavigationMenu() {
       <Link to="/app/widget">{t("navmenu_widget")}</Link>
       <Link to="/app" rel="home">{t("navmenu_home")}</Link>
       <Link to="/app/billing">{t("navmenu_billing")}</Link>
-      <Link to="/app/settings">{t("navmenu_configure")}</Link>
-      <Link to="/app/help">{t("navmenu_help")}</Link>
+      {/*<Link to="/app/analytics">{t("navmenu_analytics")}</Link>*/}
+      {/*<Link to="/app/help">{t("navmenu_help")}</Link>*/}
     </NavMenu>
   );
 }

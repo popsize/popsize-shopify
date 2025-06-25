@@ -60,19 +60,9 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
         }
 
       >
-        {/*<img
-          alt="Illustration of Popsize widget activation"
-          width="100%"
-          height="100%"
-          style={{
-            objectFit: "cover",
-            objectPosition: "center",
-          }}
-          src="/images/shopping.png"
-        />*/}
         <img
           alt="Animated walkthrough of widget activation"
-          src="/images/pricing_table.png"
+          src="https://storage.googleapis.com/popsize-shopify-images/pricing_table.png"
           style={{
             width: "100%",
             height: "100%",

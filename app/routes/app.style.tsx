@@ -81,7 +81,7 @@ export default function Style() {
               {/* Left: image */}
               <div style={{ flex: 1 }}>
                 <img
-                  src="/images/shopping.png"
+                  src="https://storage.googleapis.com/popsize-shopify-images/shopping.png"
                   alt="Widget preview"
                   style={{ maxWidth: '100%', borderRadius: '8px' }}
                 />

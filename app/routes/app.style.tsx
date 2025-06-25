@@ -17,8 +17,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (!shop) throw new Error("Missing shop in session");
 
-  //const { admin } = await authenticate.admin(request); // ✅ no second argument
-
   const response = await admin.graphql(`
     {
       shop {
@@ -29,6 +27,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await response.json();
   const shopId = result.data.shop.id;
 
+  // Save onboarding_completed
   await admin.graphql(`
     mutation {
       metafieldsSet(metafields: [{
@@ -43,6 +42,40 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }
     }
   `);
+
+  // Save widget_size as ui_size metafield
+  const widgetSize = formData.get("widget_size") || "medium";
+  await admin.graphql(
+    `
+      mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
+        metafieldsSet(metafields: $metafields) {
+          metafields {
+            id
+            key
+            namespace
+            value
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `,
+    {
+      variables: {
+        metafields: [
+          {
+            namespace: "popsize",
+            key: "ui_size",
+            type: "single_line_text_field",
+            value: widgetSize,
+            ownerId: shopId,
+          },
+        ],
+      },
+    }
+  );
 
   return redirect("/app");
 };

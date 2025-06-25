@@ -24,7 +24,7 @@
   "step1_title": "Widget integration",
   "step1_subtitle": "Integrating Popsize widget is required for it to work correctly in your store.",
   "step1_step1": "Click on the button below to open the editor",
-  "step1_step2": "Enable “Popsize Widget” under App embeds",
+  "step1_step2": "Enable “Popsize Widget” under Header > Add a section OR Apps > Add block",
   "step1_step3_part1": "Click ",
   "step1_step3_part2": "Save ",
   "step1_step3_part3": " in the theme editor",

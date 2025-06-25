@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://tropical-social-in-jets.trycloudflare.com"
+application_url = "https://ppm-chains-arrival-president.trycloudflare.com"
 embedded = true
 
 [build]
@@ -34,7 +34,7 @@ api_version = "2025-04"
 scopes = "write_products"
 
 [auth]
-redirect_urls = ["https://tropical-social-in-jets.trycloudflare.com/auth/callback", "https://tropical-social-in-jets.trycloudflare.com/auth/shopify/callback", "https://tropical-social-in-jets.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://ppm-chains-arrival-president.trycloudflare.com/auth/callback", "https://ppm-chains-arrival-president.trycloudflare.com/auth/shopify/callback", "https://ppm-chains-arrival-president.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

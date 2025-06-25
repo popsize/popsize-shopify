@@ -17,7 +17,6 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
 }) => {
 
   const { t } = useTranslation();
-  const [hasClickedEmbed, setHasClickedEmbed] = useState(false);
   
   const handleOpenThemeEditor = () => {
     const shop = new URLSearchParams(window.location.search).get("shop");
@@ -31,7 +30,6 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
     const url = `https://admin.shopify.com/store/${storeHandle}/charges/popsize/pricing_plans`;
 
     window.open(url, "_blank");
-    setHasClickedEmbed(true);
   };
 
   const handleFinish = async () => {
@@ -103,7 +101,6 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
         <Button
           variant="primary"
           onClick={handleFinish}
-          disabled={!hasClickedEmbed}
         >
           {t("finish")}
         </Button>

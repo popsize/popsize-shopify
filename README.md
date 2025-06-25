@@ -42,7 +42,7 @@ This repository contains a Shopify app (built with Remix) and a Shopify Theme Ap
    ```sh
    npm run dev
    # or
-   shopify app dev
+   shopify app dev --config dev
    ```
 
    - This will start the Remix app and serve the theme extension for your development store.

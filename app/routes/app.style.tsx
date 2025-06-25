@@ -1,15 +1,14 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { redirect, Form } from "@remix-run/react";
-import { Page, Layout, Select, Button, Text, FormLayout, LegacyCard } from "@shopify/polaris";
+import { Form, redirect, useLocation } from "@remix-run/react";
+import { Button, FormLayout, Layout, LegacyCard, Page, Select, Text } from "@shopify/polaris";
+import i18n from "app/translations/i18n";
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { authenticate } from "../shopify.server";
 import SlotSLarge from "./SlotEffect/Large/SlotS-large";
 import SlotSMedium from "./SlotEffect/Medium/SlotS-medium";
-import SlotSSmall from "./SlotEffect/Small/SlotS-small";
 import MonochromeStatic from "./SlotEffect/Monochrome-static/Monochrome-static";
-import { useTranslation } from 'react-i18next';
-import i18n from "app/translations/i18n";
-import { useLocation } from "@remix-run/react";
+import SlotSSmall from "./SlotEffect/Small/SlotS-small";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -50,7 +49,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Style() {
   //const [language, setLanguage] = useState("English");
-  const [widgetSize, setWidgetSize] = useState("Medium");
+  const [widgetSize, setWidgetSize] = useState("medium");
   const { t } = useTranslation();
   const [language, setLanguage] = useState(i18n.language === 'fr' ? 'Français' : 'English');
   const location = useLocation();
@@ -126,16 +125,16 @@ export default function Style() {
                     </div>
                     <input type="hidden" name="widget_size" value={widgetSize} />
                     <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
-                      <div onClick={() => setWidgetSize("Monochrome")} style={boxStyle("Monochrome")}>
+                      <div onClick={() => setWidgetSize("monochrome")} style={boxStyle("monochrome")}>
                         <MonochromeStatic />
                       </div>
-                      <div onClick={() => setWidgetSize("Small")} style={boxStyle("Small")}>
+                      <div onClick={() => setWidgetSize("small")} style={boxStyle("small")}>
                         <SlotSSmall />
                       </div>
-                      <div onClick={() => setWidgetSize("Medium")} style={boxStyle("Medium")}>
+                      <div onClick={() => setWidgetSize("medium")} style={boxStyle("medium")}>
                         <SlotSMedium />
                       </div>
-                      <div onClick={() => setWidgetSize("Large")} style={boxStyle("Large")}>
+                      <div onClick={() => setWidgetSize("large")} style={boxStyle("large")}>
                         <SlotSLarge />
                       </div>
                       {/* Optional: Add a fourth box */}

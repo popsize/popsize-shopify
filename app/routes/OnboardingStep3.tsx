@@ -11,13 +11,13 @@ import { MediaCard, Button, Box, Text } from "@shopify/polaris";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
+const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void; onComplete: () => void; }> = ({
   onNext,
   onBack,
+  onComplete
 }) => {
 
   const { t } = useTranslation();
-  const [hasClickedEmbed, setHasClickedEmbed] = useState(false);
   
   const handleOpenThemeEditor = () => {
     const shop = new URLSearchParams(window.location.search).get("shop");
@@ -31,7 +31,6 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
     const url = `https://admin.shopify.com/store/${storeHandle}/charges/popsize/pricing_plans`;
 
     window.open(url, "_blank");
-    setHasClickedEmbed(true);
   };
 
   const handleFinish = async () => {
@@ -43,8 +42,12 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
     }
 
     try {
-      await fetch(`/api/set-widget-billing?shop=${shop}`, { method: "POST" });
-      onNext();
+      const res = await fetch(`/api/set-widget-billing?shop=${shop}`, { method: "POST" });
+      if (res.ok) {
+        onComplete(); // ✅ trigger local billingState update
+      } else {
+        console.error("Non-200 response from billing endpoint");
+      }
     } catch (err) {
       console.error("Failed to save billing metafield:", err);
     }
@@ -103,7 +106,6 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void }> = ({
         <Button
           variant="primary"
           onClick={handleFinish}
-          disabled={!hasClickedEmbed}
         >
           {t("finish")}
         </Button>

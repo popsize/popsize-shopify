@@ -55,6 +55,7 @@ export default function OnboardingWizard() {
   const { t } = useTranslation();
   const { initialStep, billing } = useLoaderData<typeof loader>();
   const [step, setStep] = useState(initialStep);
+  const [billingState, setBillingState] = useState(billing);
 
   const TOTAL_STEPS = 3;
   const STEP_LABELS = [
@@ -76,7 +77,7 @@ export default function OnboardingWizard() {
       <TitleBar title="Popsize" />
       <Card>
           <Box padding="400">
-            {billing ? (
+            {billingState ? (
           <div style={{ textAlign: "center", padding: "40px 0" }}>
             <Text variant="headingLg" as="h2">
               {t("onboarding_complete_title", "You're all set!")}
@@ -181,7 +182,7 @@ export default function OnboardingWizard() {
         {/* Onboarding steps */}
         {step === 1 && <OnboardingStep1 onNext={handleNext} />}
         {step === 2 && <OnboardingStep2 onNext={handleNext} onBack={handleBack} />}
-        {step === 3 && <OnboardingStep3 onNext={handleNext} onBack={handleBack} />}
+        {step === 3 && <OnboardingStep3 onNext={handleNext} onBack={handleBack} onComplete={() => setBillingState(true)} />}
         {/* Add your OnboardingStep3 and 4 similarly */}
         </>
         )}

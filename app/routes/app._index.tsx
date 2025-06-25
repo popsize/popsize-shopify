@@ -1,16 +1,14 @@
-import { useState } from "react";
-import {
-  Page,
-  Layout,
-  Card,
-  Box,
-  Text,
-  Button,
-} from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
+import {
+  Box,
+  Card,
+  Page,
+  Text,
+} from "@shopify/polaris";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
-import { useTranslation } from "react-i18next";
 import OnboardingStep3 from "./OnboardingStep3";
 
 export default function OnboardingWizard() {

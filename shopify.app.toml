@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "http://shopdashboard.popsize.ai/"
+application_url = "https://shopdashboard.popsize.ai/"
 embedded = true
 
 [build]
@@ -15,11 +15,11 @@ api_version = "2025-04"
 
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
-  uri = "http://shopdashboard.popsize.ai//webhooks/app/uninstalled"
+  uri = "https://shopdashboard.popsize.ai/webhooks/app/uninstalled"
 
   [[webhooks.subscriptions]]
   topics = [ "app/scopes_update" ]
-  uri = "http://shopdashboard.popsize.ai//webhooks/app/scopes_update"
+  uri = "https://shopdashboard.popsize.ai/webhooks/app/scopes_update"
 
   [[webhooks.subscriptions]]
   compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
@@ -34,7 +34,7 @@ api_version = "2025-04"
 scopes = ""
 
 [auth]
-redirect_urls = ["http://shopdashboard.popsize.ai//auth/callback", "http://shopdashboard.popsize.ai//auth/shopify/callback", "http://shopdashboard.popsize.ai//api/auth/callback"]
+redirect_urls = ["https://shopdashboard.popsize.ai/auth/callback", "https://shopdashboard.popsize.ai/auth/shopify/callback", "https://shopdashboard.popsize.ai/api/auth/callback"]
 
 [pos]
 embedded = false

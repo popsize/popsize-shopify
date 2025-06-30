@@ -23,6 +23,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       shop {
         id
         name
+        email
         primaryDomain {
           url
         }
@@ -40,6 +41,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const shortShopId = shopId.split("/").pop();
   const shopName = shop.name;
   const shopDomain = shop.primaryDomain?.url || "";
+  const shopEmail = shop.email;
 
   // If account not created, call backend and set metafield
   if (!accountCreated) {
@@ -53,6 +55,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         shop_id: shortShopId,
         shop_domain: shopDomain,
         shop_name: shopName,
+        shop_email: shopEmail,
       }),
     });
 

@@ -19,7 +19,7 @@ export const loader = async ({ request }: any) => {
   const json = await response.json();
   const storeHandle = json.data.shop.myshopifyDomain?.split(".")[0];
 
-  console.log("Billing loader response:", json);
+  // console.log("Billing loader response:", json);
 
   return {
     redirectUrl: `https://admin.shopify.com/store/${storeHandle}/charges/popsize/pricing_plans`,

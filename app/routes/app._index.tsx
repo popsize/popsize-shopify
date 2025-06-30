@@ -1,3 +1,5 @@
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
   Box,
@@ -7,16 +9,78 @@ import {
 } from "@shopify/polaris";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { authenticate } from "../shopify.server";
 import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
 import OnboardingStep3 from "./OnboardingStep3";
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { authenticate } from "../shopify.server";
-import { useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
+
+  // Fetch accountCreated metafield and shop info
+  const accountResponse = await admin.graphql(`
+    {
+      shop {
+        id
+        name
+        primaryDomain {
+          url
+        }
+        metafield(namespace: "popsize", key: "accountCreated") {
+          value
+        }
+      }
+    }
+  `);
+
+  const accountJson = await accountResponse.json();
+  const shop = accountJson.data.shop;
+  const accountCreated = shop.metafield?.value === "true";
+  const shopId = shop.id;
+  const shortShopId = shopId.split("/").pop();
+  const shopName = shop.name;
+  const shopDomain = shop.primaryDomain?.url || "";
+
+  // If account not created, call backend and set metafield
+  if (!accountCreated) {
+    const apiResponse = await fetch("https://popsize-api-b2b-1049592794130.europe-west9.run.app/partners/create_shopify_account/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        shop_id: shortShopId,
+        shop_domain: shopDomain,
+        shop_name: shopName,
+      }),
+    });
+
+    const apiJson = await apiResponse.json();
+    if (apiJson.status_code === 201 && apiJson.message === "Account created successfully.") {
+      // Set accountCreated metafield to true
+      await admin.graphql(`
+        mutation {
+          metafieldsSet(metafields: [{
+            namespace: "popsize",
+            key: "accountCreated",
+            type: "single_line_text_field",
+            value: "true",
+            ownerId: "${shopId}"
+          }]) {
+            metafields {
+              id
+              value
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `);
+    }
+  }
 
   const response = await admin.graphql(`
     {

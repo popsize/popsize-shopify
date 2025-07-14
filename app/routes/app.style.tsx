@@ -3,7 +3,7 @@ import { Button, FormLayout, Layout, LegacyCard, Page, Select, Text } from "@sho
 import i18n from "app/translations/i18n";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
-import SlotSLarge from "./SlotEffect/Large/SlotS-large";
+//import SlotSLarge from "./SlotEffect/Large/SlotS-large";
 import SlotSMedium from "./SlotEffect/Medium/SlotS-medium";
 import MonochromeStatic from "./SlotEffect/Monochrome-static/Monochrome-static";
 import SlotSSmall from "./SlotEffect/Small/SlotS-small";
@@ -125,9 +125,9 @@ const handleWidgetSizeChange = (size: string) => {
                       <div onClick={() => handleWidgetSizeChange("medium")} style={boxStyle("medium")}>
                         <SlotSMedium />
                       </div>
-                      <div onClick={() => handleWidgetSizeChange("large")} style={boxStyle("large")}>
+                      {/*<div onClick={() => handleWidgetSizeChange("large")} style={boxStyle("large")}>
                         <SlotSLarge />
-                      </div>
+                      </div>*/}
                       {/* Optional: Add a fourth box */}
                     </div>
                     <Button

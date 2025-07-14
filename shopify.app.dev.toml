@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://satisfied-viewing-empty-applying.trycloudflare.com"
+application_url = "https://easy-miller-undergraduate-acceptable.trycloudflare.com"
 embedded = true
 
 [build]
@@ -34,7 +34,7 @@ api_version = "2025-04"
 scopes = ""
 
 [auth]
-redirect_urls = ["https://satisfied-viewing-empty-applying.trycloudflare.com/auth/callback", "https://satisfied-viewing-empty-applying.trycloudflare.com/auth/shopify/callback", "https://satisfied-viewing-empty-applying.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://easy-miller-undergraduate-acceptable.trycloudflare.com/auth/callback", "https://easy-miller-undergraduate-acceptable.trycloudflare.com/auth/shopify/callback", "https://easy-miller-undergraduate-acceptable.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

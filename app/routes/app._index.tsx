@@ -3,6 +3,7 @@ import { useLoaderData } from "@remix-run/react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
   Box,
+  Button,
   Card,
   Page,
   Text,
@@ -13,6 +14,7 @@ import { authenticate } from "../shopify.server";
 import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
 import OnboardingStep3 from "./OnboardingStep3";
+import { useNavigate } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
@@ -124,6 +126,13 @@ export default function OnboardingWizard() {
   const [step, setStep] = useState(initialStep);
   const [billingState, setBillingState] = useState(billing);
 
+  const navigate = useNavigate();
+
+  const isBillingComplete = billingState || billing;
+
+  const [showCompleteStep, setShowCompleteStep] = useState(false);
+  const [showFinalScreen, setShowFinalScreen] = useState(false);
+
   const TOTAL_STEPS = 3;
   const STEP_LABELS = [
     t('onboarding_step1'),
@@ -139,22 +148,63 @@ export default function OnboardingWizard() {
     if (step > 1) setStep(step - 1);
   };
 
+  const handleCompleteAndShowFinal = () => {
+    setBillingState(true);         // show "You're all set!"
+    setShowCompleteStep(true);
+
+    setTimeout(() => {
+      setShowCompleteStep(false);  // hide "You're all set!"
+      setShowFinalScreen(true);    // show "test popsize"
+    }, 5000);
+  };
+
+  console.log("🧠 OnboardingWizard rendered", { step, billingState });
+
   return (
     <Page fullWidth>
       <TitleBar title="Popsize" />
       <Card>
-          <Box padding="400">
-            {billingState ? (
-          <div style={{ textAlign: "center", padding: "40px 0" }}>
-            <Text variant="headingLg" as="h2">
-              {t("onboarding_complete_title", "You're all set!")}
-            </Text>
-            <Text tone="subdued" as="p" style={{ marginTop: 12 }}>
-              {t("onboarding_complete_subtitle", "Popsize is now fully configured for your store.")}
-            </Text>
-          </div>
-        ) : (
-          <>
+        <Box padding="400">
+          {isBillingComplete ? (
+            <div style={{ textAlign: "left", padding: "40px 0" }}>
+              <Text variant="headingLg" as="h2">{t('welcome_title')}</Text>
+              
+              <Box paddingBlockEnd="200" paddingBlockStart="200">
+              <Text as="h3" tone="base">
+                {t('welcome_subtitle2')}
+              </Text>
+              </Box>
+
+              <Box paddingBlockEnd="200" paddingBlockStart="200">
+                <Text as="p">{t('welcome_text_issue_intro')}</Text>
+              </Box>
+
+              <ul style={{ paddingLeft: 20, marginBottom: 20 }}>
+                <li style={{ marginBottom: 8 }}>
+                  {t('welcome_text_issue_step1_1')}<strong>{t('navmenu_integration')}</strong>{t('welcome_text_issue_step1_2')}{" "}
+                  <Button onClick={() => navigate("/app/integration")}>
+                    {t('welcome_text_issue_step1_button')}
+                  </Button>
+                </li>
+                <li>
+                  {t('welcome_text_issue_step2_1')}<strong>{t('navmenu_billing')}</strong>{t('welcome_text_issue_step2_2')}{" "}
+                  <Button onClick={() => navigate("/app/billing")}>
+                    {t('welcome_text_issue_step2_button')}
+                  </Button>
+                  <br />
+                  <em>{t('welcome_text_issue_note_1_1')}<strong>1000</strong>{t('welcome_text_issue_note_1_1')}</em>
+                </li>
+              </ul>
+
+              <Text as="p" tone="subdued">
+                {t('welcome_text_contact_message_1')}{" "}
+                <a href="mailto:partners@popsize.ai" style={{ textDecoration: "underline" }}>
+                  partners@popsize.ai
+                </a>{t('welcome_text_contact_message_2')}
+              </Text>
+            </div>
+          ) : (
+            <>
             <div
             style={{
               display: "flex",

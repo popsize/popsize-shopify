@@ -18,6 +18,8 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void; onComplete:
 }) => {
 
   const { t } = useTranslation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   
   const handleOpenThemeEditor = () => {
     const shop = new URLSearchParams(window.location.search).get("shop");
@@ -33,7 +35,7 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void; onComplete:
     window.open(url, "_blank");
   };
 
-  const handleFinish = async () => {
+  /*const handleFinish = async () => {
     const shop = new URLSearchParams(window.location.search).get("shop");
 
     if (!shop) {
@@ -51,7 +53,43 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void; onComplete:
     } catch (err) {
       console.error("Failed to save billing metafield:", err);
     }
+  };*/
+
+  const handleFinish = async () => {
+    const shop = new URLSearchParams(window.location.search).get("shop");
+    if (!shop) return console.error("Missing shop param");
+
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch(`/api/set-widget-billing?shop=${shop}`, { method: "POST" });
+      if (res.ok) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          window.location.reload(); // reload to re-trigger loader in app._index.tsx
+        }, 5000);
+      } else {
+        console.error("Failed to set billing metafield");
+      }
+    } catch (err) {
+      console.error("Error setting billing metafield:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isSuccess) {
+    return (
+      <div style={{ textAlign: "center", padding: "40px 0" }}>
+        <Text variant="headingLg" as="h2">
+          {t("onboarding_complete_title", "You're all set!")}
+        </Text>
+        <Text tone="subdued" as="p" style={{ marginTop: 12 }}>
+          {t("onboarding_complete_subtitle", "Popsize is now fully configured for your store.")}
+        </Text>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: 20 }}>
@@ -106,6 +144,7 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void; onComplete:
         <Button
           variant="primary"
           onClick={handleFinish}
+          loading={isSubmitting}
         >
           {t("finish")}
         </Button>

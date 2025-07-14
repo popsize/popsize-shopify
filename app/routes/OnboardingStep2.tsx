@@ -101,7 +101,7 @@ const OnboardingStep2: FC<{ onNext: () => void; onBack?: () => void }> = ({
         <Button
           variant="primary"
           onClick={handleContinue}
-          disabled={!hasClickedEmbed}
+          disabled={false}
         >
           {t("continue")}
         </Button>

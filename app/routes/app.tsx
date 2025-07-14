@@ -6,7 +6,8 @@ import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { boundary } from "@shopify/shopify-app-remix/server";
-
+import { Suspense } from "react";
+import { useNavigation } from "@remix-run/react";
 import { authenticate } from "../shopify.server";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
@@ -31,17 +32,23 @@ function NavigationMenu() {
       <Link to="/app/billing">{t("navmenu_billing")}</Link>
       {/*<Link to="/app/analytics">{t("navmenu_analytics")}</Link>*/}
       {/*<Link to="/app/help">{t("navmenu_help")}</Link>*/}
+      <Link to="/app/integration">{t("navmenu_integration", "Integration")}</Link>
     </NavMenu>
   );
 }
 
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
+
+  const isNavigating = navigation.state === "loading";
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <NavigationMenu />
-      <Outlet />
+      <Suspense fallback={null}>{/* or a Spinner if desired */}
+      {isNavigating ? null : <Outlet />}
+      </Suspense>
     </AppProvider>
   );
 }

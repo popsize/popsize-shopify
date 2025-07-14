@@ -7,23 +7,23 @@ application_url = "https://shopdashboard.popsize.ai/"
 embedded = true
 
 [build]
-include_config_on_deploy = true
 automatically_update_urls_on_dev = false
+include_config_on_deploy = true
 
 [webhooks]
 api_version = "2025-04"
 
   [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "https://shopdashboard.popsize.ai/webhooks/app/uninstalled"
+  uri = "pubsub://popsizedb:shopify-compliance-webhooks"
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
 
   [[webhooks.subscriptions]]
   topics = [ "app/scopes_update" ]
-  uri = "https://shopdashboard.popsize.ai/webhooks/app/scopes_update"
+  uri = "/webhooks/app/scopes_update"
 
   [[webhooks.subscriptions]]
-  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
-  uri = "pubsub://popsizedb:shopify-compliance-webhooks"
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
 
   [[webhooks.subscriptions]]
   topics = [ "app_subscriptions/update" ]
@@ -34,7 +34,11 @@ api_version = "2025-04"
 scopes = ""
 
 [auth]
-redirect_urls = ["https://shopdashboard.popsize.ai/auth/callback", "https://shopdashboard.popsize.ai/auth/shopify/callback", "https://shopdashboard.popsize.ai/api/auth/callback"]
+redirect_urls = [
+  "https://shopdashboard.popsize.ai/auth/callback",
+  "https://shopdashboard.popsize.ai/auth/shopify/callback",
+  "https://shopdashboard.popsize.ai/api/auth/callback"
+]
 
 [pos]
 embedded = false

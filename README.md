@@ -41,8 +41,8 @@ This repository contains a Shopify app (built with Remix) and a Shopify Theme Ap
 
    ```sh
    npm run dev
-   # or
-   shopify app dev --config dev
+   # or if you want to specify a store
+   shopify app dev --config dev --store popsize-dev-store.myshopify.com
    ```
 
    - This will start the Remix app and serve the theme extension for your development store.

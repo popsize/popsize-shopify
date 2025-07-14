@@ -31,6 +31,7 @@ function NavigationMenu() {
       <Link to="/app/billing">{t("navmenu_billing")}</Link>
       {/*<Link to="/app/analytics">{t("navmenu_analytics")}</Link>*/}
       {/*<Link to="/app/help">{t("navmenu_help")}</Link>*/}
+      <Link to="/app/integration">{t("navmenu_integration", "Integration")}</Link>
     </NavMenu>
   );
 }

@@ -7,6 +7,8 @@
       script.setAttribute("data-partner-id", "shopify:{{ shop.id }}");
       {% if shop.metafields.popsize.ui_size %}
         script.setAttribute("data-ui-size", "{{ shop.metafields.popsize.ui_size }}");
+      {% else %}
+        script.setAttribute("data-ui-size", "medium");
       {% endif %}
       document.body.appendChild(script);
     });

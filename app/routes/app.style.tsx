@@ -4,12 +4,12 @@ import i18n from "app/translations/i18n";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 //import SlotSLarge from "./SlotEffect/Large/SlotS-large";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { authenticate } from "app/shopify.server";
 import SlotSMedium from "./SlotEffect/Medium/SlotS-medium";
 import MonochromeStatic from "./SlotEffect/Monochrome-static/Monochrome-static";
 import SlotSSmall from "./SlotEffect/Small/SlotS-small";
-import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { authenticate } from "app/shopify.server";
-import { useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
@@ -46,9 +46,17 @@ export default function Style() {
   i18n.changeLanguage(value === 'Français' ? 'fr' : 'en');
 };
 
-const handleWidgetSizeChange = (size: string) => {
+const handleWidgetSizeChange = async (size: string) => {
   setWidgetSize(size);
-  setIsWidgetStyleSet(false); // ⬅️ same here
+  setIsWidgetStyleSet(false);
+
+  // Save widget_size as ui_size metafield via API
+  const shop = new URLSearchParams(location.search).get("shop");
+  if (!shop) return;
+
+  await fetch(`/api/set-ui-size?shop=${shop}&ui_size=${size}`, {
+    method: "POST",
+  });
 };
 
   const boxStyle = (size: string): React.CSSProperties => ({

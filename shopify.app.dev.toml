@@ -3,7 +3,7 @@
 client_id = "92dbf9030973fdc215633134e48f4936"
 name = "Popsize"
 handle = "popsize"
-application_url = "https://assessing-dui-shall-incident.trycloudflare.com"
+application_url = "https://andale-mens-specialties-canadian.trycloudflare.com"
 embedded = true
 
 [build]
@@ -34,7 +34,7 @@ api_version = "2025-04"
 scopes = ""
 
 [auth]
-redirect_urls = ["https://assessing-dui-shall-incident.trycloudflare.com/auth/callback", "https://assessing-dui-shall-incident.trycloudflare.com/auth/shopify/callback", "https://assessing-dui-shall-incident.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://andale-mens-specialties-canadian.trycloudflare.com/auth/callback", "https://andale-mens-specialties-canadian.trycloudflare.com/auth/shopify/callback", "https://andale-mens-specialties-canadian.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

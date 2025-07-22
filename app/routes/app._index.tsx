@@ -8,7 +8,7 @@ import {
   Page,
   Text,
 } from "@shopify/polaris";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { authenticate } from "../shopify.server";
 import OnboardingStep1 from "./OnboardingStep1";
@@ -115,14 +115,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   else if (widgetIntegration && widgetPlacement) initialStep = 3;
   else if (widgetIntegration) initialStep = 2;
 
-  return json({ initialStep, billing });
+  const partnerId = `shopify:${shortShopId}`;
+  console.log("✅ Sending shopId to client:", partnerId);
+
+  return json({ initialStep, billing, shopId: partnerId });
 };
+
 
 export default function OnboardingWizard() {
   //const [step, setStep] = useState(1);
   //const { widgetIntegration } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
-  const { initialStep, billing } = useLoaderData<typeof loader>();
+  const { initialStep, billing, shopId } = useLoaderData<typeof loader>();
   const [step, setStep] = useState(initialStep);
   const [billingState, setBillingState] = useState(billing);
 
@@ -132,6 +136,7 @@ export default function OnboardingWizard() {
 
   const [showCompleteStep, setShowCompleteStep] = useState(false);
   const [showFinalScreen, setShowFinalScreen] = useState(false);
+  const [isBrandReady, setIsBrandReady] = useState<boolean | null>(null);
 
   const TOTAL_STEPS = 3;
   const STEP_LABELS = [
@@ -159,6 +164,39 @@ export default function OnboardingWizard() {
   };
 
   console.log("🧠 OnboardingWizard rendered", { step, billingState });
+
+  useEffect(() => {
+    const fetchIsReady = async () => {
+      console.log("📤 Calling /brands/is_ready with partner_id:", shopId);
+      try {
+        const response = await fetch("https://popsize-api-1049592794130.europe-west9.run.app/brands/is_ready", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            partner_id: shopId,
+          }),
+        });
+
+        const text = await response.text();
+        console.log("📥 Raw API response:", text);
+
+        const data = JSON.parse(text);
+        console.log("✅ Parsed response:", data);
+
+        setIsBrandReady(data.is_ready);
+      } catch (error) {
+        console.error("❌ Error in fetchIsReady:", error);
+        setIsBrandReady(false);
+      }
+    };
+
+    if (shopId) fetchIsReady();
+  }, [shopId]);
+
+  console.log('FetchReady response: ', isBrandReady);
 
   return (
     <Page fullWidth>
@@ -202,6 +240,47 @@ export default function OnboardingWizard() {
                   partners@popsize.ai
                 </a>{t('welcome_text_contact_message_2')}
               </Text>
+              <div style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "flex-start",
+                marginTop: "24px",
+                gap: "12px",
+              }}>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  marginTop: "12px",
+                }}>
+                  <span
+                    className="material-symbols-outlined"
+                    style={{
+                      color: isBrandReady === true ? "#00C851" : "#e3e3e3",
+                      fontSize: 48,
+                    }}
+                  >
+                    square_dot
+                  </span>
+                  <span
+                    className="material-symbols-outlined"
+                    style={{
+                      color: isBrandReady === false ? "#FF8800" : "#e3e3e3",
+                      fontSize: 48,
+                      marginTop: 4,
+                    }}
+                  >
+                    square_dot
+                  </span>
+                </div>
+                <div style={{ marginTop: 24 }}>
+                  <Text as="p" tone="subdued">
+                    <strong style={{ color: isBrandReady ? "#00C851" : "#FF8800" }}>
+                      {isBrandReady === true ? t('brand_ready_message') : isBrandReady === false ? t('brand_not_ready_message') : "..."}
+                    </strong>
+                  </Text>
+                </div>
+              </div>
             </div>
           ) : (
             <>

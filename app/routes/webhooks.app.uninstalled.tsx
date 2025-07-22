@@ -5,7 +5,14 @@ import { authenticate } from "../shopify.server";
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { shop, session, topic } = await authenticate.webhook(request);
 
-  // console.log(`Received ${topic} webhook for ${shop}`);
+  await fetch("https://popsize-api-b2b-1049592794130.europe-west9.run.app/partners/uninstall_shopify_account/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      shop: String(shop),
+      session: String(session)
+    }),
+  });
 
   // Webhook requests can trigger multiple times and after an app has already been uninstalled.
   // If this webhook already ran, the session may have been deleted previously.

@@ -62,5 +62,7 @@
   "back": "Back",
   "finish": "Finish",
   "onboarding_complete_title": "🎉 You are all set!",
-  "onboarding_complete_subtitle": "Popsize is fully configured for your store, and your customers can now enjoy precise size recommendations, with AI 😊"
+  "onboarding_complete_subtitle": "Popsize is fully configured for your store, and your customers can now enjoy precise size recommendations, with AI 😊",
+  "brand_ready_message": "Your brand has been processed and the widget is now fully operational.",
+  "brand_not_ready_message": "We are processing your brand. It usually takes 24-48 hours to process it, and we will notify you by email once it's ready. In the meantime, the widget won't be visible."
 }

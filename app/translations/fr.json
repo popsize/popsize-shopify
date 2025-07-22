@@ -12,7 +12,7 @@
   "welcome_text_issue_note_1_1": "Note : si vous êtes sur la version gratuite, il y a une limite de ",
   "welcome_text_issue_note_1_2": " recommandations de taille par mois. Au-delà, le widget est automatiquement masqué.",
   "welcome_text_contact_message_1": "Si aucune des solutions ci-dessus ne fonctionne, veuillez nous contacter par e-mail à :",
-  "welcome_text_contact_message_2": " en incluant le nom de votre marque et votre SHopify ID.",
+  "welcome_text_contact_message_2": " en incluant le nom de votre marque et votre Shopify ID.",
   "setup_description": "Configurons ensemble votre widget.",
   "save_button": "Enregistrer",
   "saved_button": "Enregistré",
@@ -61,6 +61,8 @@
   "back": "Retour",
   "finish": "Terminer",
   "onboarding_complete_title": "🎉 Tout est prêt !",
-  "onboarding_complete_subtitle": "Popsize est entièrement configuré pour votre boutique, et vos clients peuvent désormais profiter de recommandations de tailles précises grâce à l’IA 😊"
+  "onboarding_complete_subtitle": "Popsize est entièrement configuré pour votre boutique, et vos clients peuvent désormais profiter de recommandations de tailles précises grâce à l’IA 😊",
+  "brand_ready_message": "Votre marque a été traitée et le widget est maintenant pleinement opérationnel.",
+"brand_not_ready_message": "Nous traitons actuellement votre marque. Cela prend généralement entre 24 et 48 heures. Vous recevrez un e-mail dès que le traitement sera terminé. En attendant, le widget ne sera pas visible."
 
 }

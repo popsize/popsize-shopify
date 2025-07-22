@@ -34,7 +34,7 @@ api_version = "2025-04"
 scopes = ""
 
 [auth]
-redirect_urls = ["https://assessing-dui-shall-incident.trycloudflare.com/auth/callback", "https://assessing-dui-shall-incident.trycloudflare.com/auth/shopify/callback", "https://assessing-dui-shall-incident.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://andale-mens-specialties-canadian.trycloudflare.com/auth/callback", "https://andale-mens-specialties-canadian.trycloudflare.com/auth/shopify/callback", "https://andale-mens-specialties-canadian.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

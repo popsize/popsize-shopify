@@ -138,7 +138,7 @@ const handleWidgetSizeChange = async (size: string) => {
                       </div>*/}
                       {/* Optional: Add a fourth box */}
                     </div>
-                    <Button
+                    {/*<Button
                       variant={isWidgetStyleSet ? "secondary" : "primary"}
                       disabled={isWidgetStyleSet}
                       onClick={async () => {
@@ -156,7 +156,14 @@ const handleWidgetSizeChange = async (size: string) => {
                       }}
                     >
                       {isWidgetStyleSet ? t('saved_button') : t('save_button')}
-                    </Button>
+                    </Button>*/}
+                    <Button
+  variant={isWidgetStyleSet ? "secondary" : "primary"}
+  disabled={isWidgetStyleSet}
+  submit
+>
+  {isWidgetStyleSet ? t('saved_button') : t('save_button')}
+</Button>
                   </FormLayout>
                 </Form>
                 <div style={{ marginTop: '1rem' }}>

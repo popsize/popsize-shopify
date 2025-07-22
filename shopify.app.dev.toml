@@ -1,8 +1,8 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "92dbf9030973fdc215633134e48f4936"
-name = "Popsize"
-handle = "popsize"
+client_id = "0f539172436db8bf4e1bf02274682999"
+name = "Popsize DEV"
+handle = "popsize-dev"
 application_url = "https://assessing-dui-shall-incident.trycloudflare.com"
 embedded = true
 

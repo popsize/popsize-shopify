@@ -230,7 +230,7 @@ export default function OnboardingWizard() {
                     {t('welcome_text_issue_step2_button')}
                   </Button>
                   <br />
-                  <em>{t('welcome_text_issue_note_1_1')}<strong>1000</strong>{t('welcome_text_issue_note_1_1')}</em>
+                  <em>{t('welcome_text_issue_note_1_1')}<strong>1000</strong>{t('welcome_text_issue_note_1_2')}</em>
                 </li>
               </ul>
 

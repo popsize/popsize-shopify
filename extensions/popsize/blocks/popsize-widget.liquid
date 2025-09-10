@@ -2,6 +2,7 @@
   <link rel="stylesheet" href="https://engine.popsize.ai/latest/button.css" crossorigin="anonymous"/>
   <script
     src="https://engine.popsize.ai/latest/button.js"
+    defer
     data-partner-id="shopify:{{ shop.id }}"
     data-ui-size="{% if shop.metafields.popsize.ui_size %}{{ shop.metafields.popsize.ui_size }}{% else %}medium{% endif %}"
     {% if customer %}

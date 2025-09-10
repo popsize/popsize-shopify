@@ -1,24 +1,14 @@
 {% if shop.id %}
-  <link rel="stylesheet" href="https://engine.popsize.ai/latest/static/css/main.latest.css" crossorigin="anonymous"/>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var script = document.createElement("script");
-      script.src = "https://engine.popsize.ai/latest/static/js/main.latest.js";
-      script.setAttribute("data-partner-id", "shopify:{{ shop.id }}");
-      {% if shop.metafields.popsize.ui_size %}
-        script.setAttribute("data-ui-size", "{{ shop.metafields.popsize.ui_size }}");
-      {% else %}
-        script.setAttribute("data-ui-size", "medium");
-      {% endif %}
-      document.body.appendChild(script);
-    });
-    /*
+  <link rel="stylesheet" href="https://engine.popsize.ai/latest/button.css" crossorigin="anonymous"/>
+  <script
+    src="https://engine.popsize.ai/latest/button.js"
+    data-partner-id="shopify:{{ shop.id }}"
+    data-ui-size="{% if shop.metafields.popsize.ui_size %}{{ shop.metafields.popsize.ui_size }}{% else %}medium{% endif %}"
     {% if customer %}
-      console.log("Customer email: {{ customer.email }}");
-      console.log("Customer ID: {{ customer.id }}");
+      data-customer-id="{{ customer.id }}"
+      data-customer-email="{{ customer.email }}"
     {% endif %}
-    */
-  </script>
+  ></script>
 {% endif %}
 
 {% schema %}

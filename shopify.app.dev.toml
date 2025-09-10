@@ -3,7 +3,7 @@
 client_id = "0f539172436db8bf4e1bf02274682999"
 name = "Popsize DEV"
 handle = "popsize-dev"
-application_url = "https://assessing-dui-shall-incident.trycloudflare.com"
+application_url = "https://hydrocodone-released-conditions-beginner.trycloudflare.com"
 embedded = true
 
 [build]
@@ -34,7 +34,7 @@ api_version = "2025-04"
 scopes = ""
 
 [auth]
-redirect_urls = ["https://andale-mens-specialties-canadian.trycloudflare.com/auth/callback", "https://andale-mens-specialties-canadian.trycloudflare.com/auth/shopify/callback", "https://andale-mens-specialties-canadian.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://hydrocodone-released-conditions-beginner.trycloudflare.com/auth/callback", "https://hydrocodone-released-conditions-beginner.trycloudflare.com/auth/shopify/callback", "https://hydrocodone-released-conditions-beginner.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

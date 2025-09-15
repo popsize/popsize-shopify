@@ -31,10 +31,6 @@ This repository contains a Shopify app (built with Remix) and a Shopify Theme Ap
 
    ```sh
    npm install
-   # or
-   yarn install
-   # or
-   pnpm install
    ```
 
 2. **Start local development**

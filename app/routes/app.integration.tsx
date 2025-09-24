@@ -16,118 +16,51 @@ import OnboardingStep2 from "./OnboardingStep2";
 import OnboardingStep3 from "./OnboardingStep3";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { admin } = await authenticate.admin(request);
+  // const { admin } = await authenticate.admin(request);
 
   // Fetch accountCreated metafield and shop info
-  const accountResponse = await admin.graphql(`
-    {
-      shop {
-        id
-        name
-        email
-        primaryDomain {
-          url
-        }
-      }
-    }
-  `);
+  // const accountResponse = await admin.graphql(`
+  //   {
+  //     shop {
+  //       id
+  //       customerAccountUrl
+  //       name
+  //       email
+  //       primaryDomain {
+  //         url
+  //       }
+  //     }
+  //   }
+  // `);
 
-  const accountJson = await accountResponse.json();
-  const shop = accountJson.data.shop;
-  const accountCreated = shop.metafield?.value === "true";
-  const shopId = shop.id;
-  const shortShopId = shopId.split("/").pop();
-  const shopName = shop.name;
-  const shopDomain = shop.primaryDomain?.url || "";
-  const shopEmail = shop.email;
+  // const accountJson = await accountResponse.json();
+  // const shop = accountJson.data.shop;
+  // console.log("Fetched shop data:", shop);
+  // const accountCreated = shop.metafield?.value === "true";
+  // const shopId = shop.id;
+  // const shortShopId = shopId.split("/").pop();
+  // const shopName = shop.name;
+  // const shopDomain = shop.primaryDomain?.url || "";
+  // const shopEmail = shop.email;
 
+  // Optional: create account again in backend
+  // TODO: D.R.Y. WHY SOMEONE HAS DUPLICATED THE ACCOUTN CREATION CODE?
   // If account not created, call backend and set metafield
-  /*if (!accountCreated) {
-    const apiResponse = await fetch("https://popsize-api-b2b-1049592794130.europe-west9.run.app/partners/create_shopify_account/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        shop_id: shortShopId,
-        shop_domain: shopDomain,
-        shop_name: shopName,
-        shop_email: shopEmail,
-      }),
-    });
-
-    const apiJson = await apiResponse.json();
-    if (apiJson.status_code === 201 && apiJson.message === "Account created successfully.") {
-      // Set accountCreated metafield to true
-      await admin.graphql(`
-        mutation {
-          metafieldsSet(metafields: [{
-            namespace: "popsize",
-            key: "accountCreated",
-            type: "single_line_text_field",
-            value: "true",
-            ownerId: "${shopId}"
-          }]) {
-            metafields {
-              id
-              value
-            }
-            userErrors {
-              field
-              message
-            }
-          }
-        }
-      `);
-    }
-  }
-
-  const response = await admin.graphql(`
-    {
-      shop {
-        widgetIntegration: metafield(namespace: "popsize", key: "widget_integration") {
-          value
-        }
-        widgetPlacement: metafield(namespace: "popsize", key: "widget_placement") {
-          value
-        }
-        billing: metafield(namespace: "popsize", key: "billing") {
-          value
-        }
-      }
-    }
-  `);
-
-  const result = await response.json();
-
-  const widgetIntegration = result.data.shop.widgetIntegration?.value === "true";
-  const widgetPlacement = result.data.shop.widgetPlacement?.value === "true";
-  const billing = result.data.shop.billing?.value === "true";
-
-
-  let initialStep = 1;
-  if (billing) initialStep = 4;
-  else if (widgetIntegration && widgetPlacement) initialStep = 3;
-  else if (widgetIntegration) initialStep = 2;
-
-  return json({ initialStep, billing });
-};*/
-
-// Optional: create account again in backend
-  await fetch("https://popsize-api-b2b-1049592794130.europe-west9.run.app/partners/create_shopify_account/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      shop_id: shortShopId,
-      shop_domain: shopDomain,
-      shop_name: shopName,
-      shop_email: shopEmail,
-    }),
-  });
+  // if (!accountCreated) {
+  //   const apiResponse = await fetch("https://popsize-api-b2b-1049592794130.europe-west9.run.app/partners/create_shopify_account/", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       shop_id: shortShopId,
+  //       shop_domain: shopDomain,
+  //       shop_name: shopName,
+  //       shop_email: shopEmail,
+  //     }),
+  //   });
+  // }
 
   // Always start at step 1, billing false to force onboarding
   return json({ initialStep: 1, billing: false });

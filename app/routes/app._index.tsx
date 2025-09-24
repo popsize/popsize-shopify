@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData , useNavigate } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
   Box,
@@ -27,8 +27,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         name
         email
         primaryDomain {
-          url
+          host
         }
+        myshopifyDomain
         metafield(namespace: "popsize", key: "accountCreated") {
           value
         }
@@ -42,7 +43,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const shopId = shop.id;
   const shortShopId = shopId.split("/").pop();
   const shopName = shop.name;
-  const shopDomain = shop.primaryDomain?.url || "";
+  const shopDomain = shop.primaryDomain?.host || "";
+  const myshopifyDomain = shop.myshopifyDomain;
   const shopEmail = shop.email;
 
   // If account not created, call backend and set metafield
@@ -55,7 +57,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       },
       body: JSON.stringify({
         shop_id: shortShopId,
-        shop_domain: shopDomain,
+        shop_domains: [ shopDomain, myshopifyDomain ],
         shop_name: shopName,
         shop_email: shopEmail,
       }),

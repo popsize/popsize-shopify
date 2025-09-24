@@ -1,13 +1,12 @@
 // routes/app.tsx
 
 import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import { Link, Outlet, useLoaderData, useRouteError , useNavigation } from "@remix-run/react";
 import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { boundary } from "@shopify/shopify-app-remix/server";
 import { Suspense } from "react";
-import { useNavigation } from "@remix-run/react";
 import { authenticate } from "../shopify.server";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";

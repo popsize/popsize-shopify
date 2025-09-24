@@ -1,10 +1,10 @@
-import { Form, useLocation } from "@remix-run/react";
+import { Form, useLocation , useLoaderData } from "@remix-run/react";
 import { Button, FormLayout, Layout, LegacyCard, Page, Select, Text } from "@shopify/polaris";
 import i18n from "app/translations/i18n";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
-import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { authenticate } from "app/shopify.server";
 import SlotSMedium from "./SlotEffect/Medium/SlotS-medium";
 import MonochromeStatic from "./SlotEffect/Monochrome-static/Monochrome-static";

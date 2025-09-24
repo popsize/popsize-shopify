@@ -1,5 +1,6 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { useLoaderData , useNavigate } from "@remix-run/react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
   Box,
@@ -14,7 +15,6 @@ import { authenticate } from "../shopify.server";
 import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
 import OnboardingStep3 from "./OnboardingStep3";
-import { useNavigate } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);

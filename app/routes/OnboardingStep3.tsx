@@ -8,7 +8,8 @@ Embed button should head the user to its store to embed <Popsize>*/
 
 
 import { MediaCard, Button, Box, Text } from "@shopify/polaris";
-import { FC, useState } from "react";
+import type { FC} from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void; onComplete: () => void; }> = ({

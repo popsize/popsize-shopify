@@ -125,8 +125,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 
 export default function OnboardingWizard() {
-  //const [step, setStep] = useState(1);
-  //const { widgetIntegration } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
   const { initialStep, billing, shopId } = useLoaderData<typeof loader>();
   const [step, setStep] = useState(initialStep);
@@ -206,7 +204,8 @@ export default function OnboardingWizard() {
       <Card>
         <Box padding="400">
           {isBillingComplete ? (
-            <div style={{ textAlign: "left", padding: "40px 0" }}>
+            <div style={{ textAlign: "left", padding: "20px 0" }}>
+              {/* INTRO */}
               <Text variant="headingLg" as="h2">{t('welcome_title')}</Text>
               
               <Box paddingBlockEnd="200" paddingBlockStart="200">
@@ -215,38 +214,12 @@ export default function OnboardingWizard() {
               </Text>
               </Box>
 
-              <Box paddingBlockEnd="200" paddingBlockStart="200">
-                <Text as="p">{t('welcome_text_issue_intro')}</Text>
-              </Box>
-
-              <ul style={{ paddingLeft: 20, marginBottom: 20 }}>
-                <li style={{ marginBottom: 8 }}>
-                  {t('welcome_text_issue_step1_1')}<strong>{t('navmenu_integration')}</strong>{t('welcome_text_issue_step1_2')}{" "}
-                  <Button onClick={() => navigate("/app/integration")}>
-                    {t('welcome_text_issue_step1_button')}
-                  </Button>
-                </li>
-                <li>
-                  {t('welcome_text_issue_step2_1')}<strong>{t('navmenu_billing')}</strong>{t('welcome_text_issue_step2_2')}{" "}
-                  <Button onClick={() => navigate("/app/billing")}>
-                    {t('welcome_text_issue_step2_button')}
-                  </Button>
-                  <br />
-                  <em>{t('welcome_text_issue_note_1_1')}<strong>1000</strong>{t('welcome_text_issue_note_1_2')}</em>
-                </li>
-              </ul>
-
-              <Text as="p" tone="subdued">
-                {t('welcome_text_contact_message_1')}{" "}
-                <a href="mailto:partners@popsize.ai" style={{ textDecoration: "underline" }}>
-                  partners@popsize.ai
-                </a>{t('welcome_text_contact_message_2')}
-              </Text>
+              {/* STATUS */}
               <div style={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "flex-start",
-                marginTop: "24px",
+                marginBottom: "24px",
                 gap: "12px",
               }}>
                 <div style={{
@@ -283,6 +256,37 @@ export default function OnboardingWizard() {
                   </Text>
                 </div>
               </div>
+
+              <hr />
+              {/* ISSUES */}
+              <Box paddingBlockEnd="200" paddingBlockStart="200">
+                <Text as="p">{t('welcome_text_issue_intro')}</Text>
+              </Box>
+
+              <ul style={{ paddingLeft: 20, marginBottom: 20 }}>
+                <li style={{ marginBottom: 8 }}>
+                  {t('welcome_text_issue_step1_1')}<strong>{t('navmenu_integration')}</strong>{t('welcome_text_issue_step1_2')}{" "}
+                  <Button onClick={() => navigate("/app/integration")}>
+                    {t('welcome_text_issue_step1_button')}
+                  </Button>
+                </li>
+                <li>
+                  {t('welcome_text_issue_step2_1')}<strong>{t('navmenu_billing')}</strong>{t('welcome_text_issue_step2_2')}{" "}
+                  <Button onClick={() => navigate("/app/billing")}>
+                    {t('welcome_text_issue_step2_button')}
+                  </Button>
+                  <br />
+                  <em>{t('welcome_text_issue_note_1_1')}<strong>1000</strong>{t('welcome_text_issue_note_1_2')}</em>
+                </li>
+              </ul>
+
+              <Text as="p" tone="subdued">
+                {t('welcome_text_contact_message_1')}{" "}
+                <a href="mailto:partners@popsize.ai" style={{ textDecoration: "underline" }}>
+                  partners@popsize.ai
+                </a>{t('welcome_text_contact_message_2')}
+              </Text>
+
             </div>
           ) : (
             <>

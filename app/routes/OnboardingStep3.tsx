@@ -7,10 +7,12 @@ Embed button should head the user to its store to embed <Popsize>*/
 
 
 
-import { MediaCard, Button, Box, Text } from "@shopify/polaris";
-import type { FC} from "react";
+import { Box, Button, MediaCard, Text } from "@shopify/polaris";
+import type { FC } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { makeOnboardingApiCall } from "../utils/onboardingApi";
+import { openAdminPage } from "../utils/themeEditor";
 
 const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void; onComplete: () => void; }> = ({
   onNext,
@@ -22,61 +24,21 @@ const OnboardingStep3: FC<{ onNext: () => void; onBack?: () => void; onComplete:
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   
-  const handleOpenThemeEditor = () => {
-    const shop = new URLSearchParams(window.location.search).get("shop");
-
-    if (!shop) {
-      console.error("Shop parameter missing in URL.");
-      return;
-    }
-
-    const storeHandle = shop.split(".")[0]; // extract 'popsize-test-boutique' from full shop domain
-    const url = `https://admin.shopify.com/store/${storeHandle}/charges/popsize/pricing_plans`;
-
-    window.open(url, "_blank");
+  const handleOpenThemeEditor = async () => {
+    await openAdminPage('charges/popsize/pricing_plans');
   };
 
-  /*const handleFinish = async () => {
-    const shop = new URLSearchParams(window.location.search).get("shop");
-
-    if (!shop) {
-      console.error("Shop parameter missing.");
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/set-widget-billing?shop=${shop}`, { method: "POST" });
-      if (res.ok) {
-        onComplete(); // ✅ trigger local billingState update
-      } else {
-        console.error("Non-200 response from billing endpoint");
-      }
-    } catch (err) {
-      console.error("Failed to save billing metafield:", err);
-    }
-  };*/
-
   const handleFinish = async () => {
-    const shop = new URLSearchParams(window.location.search).get("shop");
-    if (!shop) return console.error("Missing shop param");
-
     setIsSubmitting(true);
 
-    try {
-      const res = await fetch(`/api/set-widget-billing?shop=${shop}`, { method: "POST" });
-      if (res.ok) {
-        setIsSuccess(true);
-        setTimeout(() => {
-          window.location.reload(); // reload to re-trigger loader in app._index.tsx
-        }, 5000);
-      } else {
-        console.error("Failed to set billing metafield");
-      }
-    } catch (err) {
-      console.error("Error setting billing metafield:", err);
-    } finally {
-      setIsSubmitting(false);
+    const success = await makeOnboardingApiCall('/api/set-widget-billing');
+    if (success) {
+      setIsSuccess(true);
+    } else {
+      // Error already handled by utility function
     }
+
+    setIsSubmitting(false);
   };
 
   if (isSuccess) {

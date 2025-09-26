@@ -7,10 +7,12 @@ Embed button should head the user to its store to embed <Popsize>*/
 
 
 
-import { MediaCard, Button, Box, Text } from "@shopify/polaris";
-import type { FC} from "react";
+import { Box, Button, MediaCard, Text } from "@shopify/polaris";
+import type { FC } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { makeOnboardingApiCall } from "../utils/onboardingApi";
+import { openAdminPage } from "../utils/themeEditor";
 
 const OnboardingStep1: FC<{ onNext: () => void; onBack?: () => void }> = ({
   onNext,
@@ -20,31 +22,17 @@ const OnboardingStep1: FC<{ onNext: () => void; onBack?: () => void }> = ({
   const { t } = useTranslation();
   const [hasClickedEmbed, setHasClickedEmbed] = useState(false);
 
-  const handleOpenThemeEditor = () => {
-    const shop = new URLSearchParams(window.location.search).get("shop");
-
-    if (!shop) {
-      console.error("Shop parameter missing in URL.");
-      return;
+  const handleOpenThemeEditor = async () => {
+    const success = await openAdminPage('themes/current/editor?template=product&section=header');
+    if (success) {
+      setHasClickedEmbed(true);
     }
-
-    const url = `https://${shop}/admin/themes/current/editor?section=header`;
-    window.open(url, "_blank");
-    setHasClickedEmbed(true);
   };
 
   const handleContinue = async () => {
-    const shop = new URLSearchParams(window.location.search).get("shop");
-    if (!shop) {
-      console.error("Shop parameter missing.");
-      return;
-    }
-
-    try {
-      await fetch(`/api/set-widget-integration?shop=${shop}`, { method: "POST" });
+    const success = await makeOnboardingApiCall('/api/set-widget-integration');
+    if (success) {
       onNext();
-    } catch (err) {
-      console.error("Failed to save metafield:", err);
     }
   };
 
@@ -100,7 +88,6 @@ const OnboardingStep1: FC<{ onNext: () => void; onBack?: () => void }> = ({
         </Button>
         <Button
           variant="primary"
-          //onClick={onNext}
           onClick={handleContinue}
           disabled={false}
         >

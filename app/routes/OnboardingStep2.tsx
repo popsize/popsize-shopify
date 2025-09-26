@@ -7,10 +7,12 @@ Embed button should head the user to its store to embed <Popsize>*/
 
 
 
-import { MediaCard, Button, Box, Text } from "@shopify/polaris";
-import type { FC} from "react";
+import { Box, Button, MediaCard, Text } from "@shopify/polaris";
+import type { FC } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { makeOnboardingApiCall } from "../utils/onboardingApi";
+import { openAdminPage } from "../utils/themeEditor";
 
 const OnboardingStep2: FC<{ onNext: () => void; onBack?: () => void }> = ({
   onNext,
@@ -20,31 +22,17 @@ const OnboardingStep2: FC<{ onNext: () => void; onBack?: () => void }> = ({
   const { t } = useTranslation();
   const [hasClickedEmbed, setHasClickedEmbed] = useState(false);
   
-    const handleOpenThemeEditor = () => {
-    const shop = new URLSearchParams(window.location.search).get("shop");
-  
-    if (!shop) {
-      console.error("Shop parameter missing in URL.");
-      return;
+  const handleOpenThemeEditor = async () => {
+    const success = await openAdminPage('themes/current/editor?template=product');
+    if (success) {
+      setHasClickedEmbed(true);
     }
-  
-    const url = `https://${shop}/admin/themes/current/editor?template=product`;
-    window.open(url, "_blank");
-    setHasClickedEmbed(true);
   };
 
   const handleContinue = async () => {
-    const shop = new URLSearchParams(window.location.search).get("shop");
-    if (!shop) {
-      console.error("Shop parameter missing.");
-      return;
-    }
-
-    try {
-      await fetch(`/api/set-widget-placement?shop=${shop}`, { method: "POST" });
+    const success = await makeOnboardingApiCall('/api/set-widget-placement');
+    if (success) {
       onNext();
-    } catch (err) {
-      console.error("Failed to save placement metafield:", err);
     }
   };
 

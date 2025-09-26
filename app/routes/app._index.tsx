@@ -120,13 +120,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const partnerId = `shopify:${shortShopId}`;
   console.log("✅ Sending shopId to client:", partnerId);
 
-  return json({ initialStep, billing, shopId: partnerId });
+  return json({ initialStep, billing, shopId: partnerId, shopName, myshopifyDomain });
 };
 
 
 export default function OnboardingWizard() {
   const { t } = useTranslation();
-  const { initialStep, billing, shopId } = useLoaderData<typeof loader>();
+  const { initialStep, billing, shopId, shopName, myshopifyDomain } = useLoaderData<typeof loader>();
   const [step, setStep] = useState(initialStep);
   const [billingState, setBillingState] = useState(billing);
 
@@ -282,7 +282,7 @@ export default function OnboardingWizard() {
 
               <Text as="p" tone="subdued">
                 {t('welcome_text_contact_message_1')}{" "}
-                <a href="mailto:partners@popsize.ai" style={{ textDecoration: "underline" }}>
+                <a href={`mailto:partners@popsize.ai?subject=Support Request&body=Shop Name: ${shopName}%0AMyshopify Domain: ${myshopifyDomain}`} style={{ textDecoration: "underline" }}>
                   partners@popsize.ai
                 </a>{t('welcome_text_contact_message_2')}
               </Text>

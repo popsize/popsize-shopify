@@ -12,7 +12,7 @@
   "welcome_text_issue_note_1_1": "Note : si vous êtes sur la version gratuite, il y a une limite de ",
   "welcome_text_issue_note_1_2": " recommandations de taille par mois. Au-delà, le widget est automatiquement masqué.",
   "welcome_text_contact_message_1": "Si aucune des solutions ci-dessus ne fonctionne, veuillez nous contacter par e-mail à :",
-  "welcome_text_contact_message_2": " en incluant le nom de votre marque et votre Shopify ID.",
+  "welcome_text_contact_message_2": " (l'email doit inclure le nom de la marque et le domaine myshopify).",
   "setup_description": "Configurons ensemble votre widget.",
   "save_button": "Enregistrer",
   "saved_button": "Enregistré",

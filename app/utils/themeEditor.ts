@@ -4,7 +4,7 @@
 
 export const openAdminPage = async (path: string) => {
   try {
-    // Fetch shop name using the standard GraphQL shop query
+    // Fetch admin base URL using the shop-info API
     const response = await fetch('/api/shop-info', {
       method: 'GET',
       headers: {
@@ -19,15 +19,15 @@ export const openAdminPage = async (path: string) => {
       return;
     }
 
-    const shopName = data.shop?.name?.replace(/\s+/g, '-');
+    const adminBaseUrl = data.adminBaseUrl;
 
-    if (!shopName) {
-      alert("Shop name not found in response.");
+    if (!adminBaseUrl) {
+      alert("Admin base URL not found in response.");
       return;
     }
 
     // Construct URL with the provided path
-    const urlToOpen = `https://admin.shopify.com/store/${shopName}/${path}`;
+    const urlToOpen = `${adminBaseUrl}${path}`;
 
     window.open(urlToOpen, "_blank");
     return true; // Success indicator

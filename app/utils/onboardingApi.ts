@@ -4,7 +4,7 @@
 
 export const makeOnboardingApiCall = async (apiEndpoint: string) => {
   try {
-    // Fetch shop name using the standard GraphQL shop query
+    // Fetch admin base URL using the shop-info API
     const response = await fetch('/api/shop-info', {
       method: 'GET',
       headers: {
@@ -19,14 +19,22 @@ export const makeOnboardingApiCall = async (apiEndpoint: string) => {
       return false;
     }
 
-    const shop = data.shop?.name?.replace(/\s+/g, '-');
+    const adminBaseUrl = data.adminBaseUrl;
 
-    if (!shop) {
-      alert("Shop name not found in response.");
+    if (!adminBaseUrl) {
+      alert("Admin base URL not found in response.");
       return false;
     }
 
-    const apiResponse = await fetch(`${apiEndpoint}?shop=${shop}`, { method: "POST" });
+    // Extract shop domain from admin base URL (e.g., popsize-dev-store.myshopify.com)
+    const shopDomain = adminBaseUrl.match(/https:\/\/([^\/]+)/)?.[1];
+    
+    if (!shopDomain) {
+      alert("Failed to extract shop domain from admin base URL.");
+      return false;
+    }
+
+    const apiResponse = await fetch(`${apiEndpoint}?shop=${shopDomain}`, { method: "POST" });
 
     if (!apiResponse.ok) {
       alert("Failed to save data to Shopify.");

@@ -2,7 +2,7 @@
   "welcome_title": "Welcome to Popsize 👋",
   "welcome_subtitle": "The most advanced AI sizing tool",
   "welcome_subtitle2": "You have completed the integration tutorial. Now it's on our side. When we'll have processed your brand, the widget will be fully operational.",
-  "welcome_text_issue_intro": "Should you face any integration issues, follow the steps below:",
+  "welcome_text_issue_intro": "If it's green but the widget doesn't show up on your store, follow the steps below:",
   "welcome_text_issue_step1_1": "Open the \"",
   "welcome_text_issue_step1_2": "\" tab and make sure you have followed all the steps.",
   "welcome_text_issue_step1_button": "Go to Integration",

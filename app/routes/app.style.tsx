@@ -1,15 +1,15 @@
-import { Form, useLocation , useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
 import { Button, FormLayout, Layout, LegacyCard, Page, Select, Text } from "@shopify/polaris";
+import { authenticate } from "app/shopify.server";
 import i18n from "app/translations/i18n";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { authenticate } from "app/shopify.server";
+import SlotSLarge from "./SlotEffect/Large/SlotS-large";
 import SlotSMedium from "./SlotEffect/Medium/SlotS-medium";
 import MonochromeStatic from "./SlotEffect/Monochrome-static/Monochrome-static";
 import SlotSSmall from "./SlotEffect/Small/SlotS-small";
-import SlotSLarge from "./SlotEffect/Large/SlotS-large";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
@@ -20,14 +20,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         widgetStyle: metafield(namespace: "popsize", key: "widget_style") {
           value
         }
+        domain
       }
     }
   `);
 
   const result = await response.json();
   const isWidgetStyleSet = !!result?.data?.shop?.widgetStyle?.value;
+  const shop = result?.data?.shop?.domain;
 
-  return json({ isWidgetStyleSet });
+  return json({ isWidgetStyleSet, shop });
 };
 
 export default function Style() {
@@ -35,9 +37,9 @@ export default function Style() {
   const [widgetSize, setWidgetSize] = useState("medium");
   const { t } = useTranslation();
   const [language, setLanguage] = useState(i18n.language === 'fr' ? 'Français' : 'English');
-  const location = useLocation();
   const data = useLoaderData<typeof loader>() || {};
   const [isWidgetStyleSet, setIsWidgetStyleSet] = useState<boolean>(data.isWidgetStyleSet ?? false);
+  const shop = data.shop;
 
 
   const handleLanguageChange = (value: string) => {
@@ -51,7 +53,6 @@ const handleWidgetSizeChange = async (size: string) => {
   setIsWidgetStyleSet(false);
 
   // Save widget_size as ui_size metafield via API
-  const shop = new URLSearchParams(location.search).get("shop");
   if (!shop) return;
 
   await fetch(`/api/set-ui-size?shop=${shop}&ui_size=${size}`, {
@@ -94,7 +95,6 @@ const handleWidgetSizeChange = async (size: string) => {
                   </Text>
                 </div>
                 <Form method="post">
-                  {/*<input type="hidden" name="shop" value={new URLSearchParams(location.search).get("shop") ?? ""} />*/}
                   <input type="hidden" name="widget_size" value={widgetSize} />
                   <FormLayout>
                     <div style={{ marginBottom: '0px' }}>
@@ -138,32 +138,13 @@ const handleWidgetSizeChange = async (size: string) => {
                       </div>
                       {/* Optional: Add a fourth box */}
                     </div>
-                    {/*<Button
+                    <Button
                       variant={isWidgetStyleSet ? "secondary" : "primary"}
                       disabled={isWidgetStyleSet}
-                      onClick={async () => {
-                        const shop = new URLSearchParams(location.search).get("shop");
-                        if (!shop) return;
-
-                        const res = await fetch(`/api/set-widget-style?shop=${shop}`, {
-                          method: "POST",
-                        });
-
-                        const data = await res.json();
-                        if (data.success) {
-                          setIsWidgetStyleSet(true);
-                        }
-                      }}
+                      submit
                     >
                       {isWidgetStyleSet ? t('saved_button') : t('save_button')}
-                    </Button>*/}
-                    <Button
-  variant={isWidgetStyleSet ? "secondary" : "primary"}
-  disabled={isWidgetStyleSet}
-  submit
->
-  {isWidgetStyleSet ? t('saved_button') : t('save_button')}
-</Button>
+                    </Button>
                   </FormLayout>
                 </Form>
                 <div style={{ marginTop: '1rem' }}>

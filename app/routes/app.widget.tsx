@@ -89,11 +89,11 @@ export default function Widget() {
       content: t("tab_setup") || "Setup",
       panelID: "setup-panel",
     },
-    {
-      id: "advanced-tab",
-      content: t("tab_advanced") || "Advanced",
-      panelID: "advanced-panel",
-    },
+    // {
+    //   id: "advanced-tab",
+    //   content: t("tab_advanced") || "Advanced",
+    //   panelID: "advanced-panel",
+    // },
   ];
 
   return (

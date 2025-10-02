@@ -5,7 +5,7 @@ import { authenticate } from "../shopify.server";
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { shop, session, topic } = await authenticate.webhook(request);
 
-  await fetch(`${process.env.POPSIZE_API_B2B_URL}/partners/uninstall_shopify_account/`, {
+  await fetch(`${process.env.POPSIZE_B2B_API_URL}/partners/uninstall_shopify_account/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

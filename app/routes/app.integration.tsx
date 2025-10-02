@@ -46,7 +46,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // TODO: D.R.Y. WHY SOMEONE HAS DUPLICATED THE ACCOUTN CREATION CODE?
   // If account not created, call backend and set metafield
   // if (!accountCreated) {
-  //   const apiResponse = await fetch(`${process.env.POPSIZE_API_B2B_URL}/partners/create_shopify_account/`, {
+  //   const apiResponse = await fetch(`${process.env.POPSIZE_B2B_API_URL}/partners/create_shopify_account/`, {
   //     method: "POST",
   //     headers: {
   //       "Content-Type": "application/json",

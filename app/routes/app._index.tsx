@@ -49,7 +49,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   // If account not created, call backend and set metafield
   if (!accountCreated) {
-    const apiResponse = await fetch(`${process.env.POPSIZE_API_B2B_URL}/partners/create_shopify_account/`, {
+    const apiResponse = await fetch(`${process.env.POPSIZE_B2B_API_URL}/partners/create_shopify_account/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -120,13 +120,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const partnerId = `shopify:${shortShopId}`;
   console.log("✅ Sending shopId to client:", partnerId);
 
-  return json({ initialStep, billing, shopId: partnerId, shopName, myshopifyDomain });
+  return json({ initialStep, billing, shopId: partnerId, shopName, myshopifyDomain, apiUrl: process.env.POPSIZE_B2B_API_URL, apiB2bUrl: process.env.POPSIZE_B2B_API_URL });
 };
 
 
 export default function OnboardingWizard() {
   const { t } = useTranslation();
-  const { initialStep, billing, shopId, shopName, myshopifyDomain } = useLoaderData<typeof loader>();
+  const { initialStep, billing, shopId, shopName, myshopifyDomain, apiUrl } = useLoaderData<typeof loader>();
   const [step, setStep] = useState(initialStep);
   const [billingState, setBillingState] = useState(billing);
 
@@ -167,9 +167,10 @@ export default function OnboardingWizard() {
 
   useEffect(() => {
     const fetchIsReady = async () => {
-      console.log("📤 Calling /brands/is_ready with partner_id:", shopId);
+      console.log("📤 Calling /partners/is_ready with partner_id:", shopId);
       try {
-        const response = await fetch(`${process.env.POPSIZE_API_BASE_URL}/brands/is_ready`, {
+        console.log("Using API URL:", apiUrl);
+        const response = await fetch(`${apiUrl}/partners/is_ready`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

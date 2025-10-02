@@ -10,7 +10,6 @@ import {
 } from "@shopify/polaris";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { authenticate } from "../shopify.server";
 import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
 import OnboardingStep3 from "./OnboardingStep3";
@@ -47,7 +46,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // TODO: D.R.Y. WHY SOMEONE HAS DUPLICATED THE ACCOUTN CREATION CODE?
   // If account not created, call backend and set metafield
   // if (!accountCreated) {
-  //   const apiResponse = await fetch("https://popsize-api-b2b-1049592794130.europe-west9.run.app/partners/create_shopify_account/", {
+  //   const apiResponse = await fetch(`${process.env.POPSIZE_API_B2B_URL}/partners/create_shopify_account/`, {
   //     method: "POST",
   //     headers: {
   //       "Content-Type": "application/json",

@@ -49,7 +49,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   // If account not created, call backend and set metafield
   if (!accountCreated) {
-    const apiResponse = await fetch("https://popsize-api-b2b-1049592794130.europe-west9.run.app/partners/create_shopify_account/", {
+    const apiResponse = await fetch(`${process.env.POPSIZE_API_B2B_URL}/partners/create_shopify_account/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -169,7 +169,7 @@ export default function OnboardingWizard() {
     const fetchIsReady = async () => {
       console.log("📤 Calling /brands/is_ready with partner_id:", shopId);
       try {
-        const response = await fetch("https://popsize-api-1049592794130.europe-west9.run.app/brands/is_ready", {
+        const response = await fetch(`${process.env.POPSIZE_API_BASE_URL}/brands/is_ready`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

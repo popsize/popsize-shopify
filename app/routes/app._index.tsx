@@ -19,8 +19,8 @@ import OnboardingStep3 from "./OnboardingStep3";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
 
-  // Fetch accountCreated metafield and shop info
-  const accountResponse = await admin.graphql(`
+  // Fetch accountCreated metafield and shop info (including accountOwner and billing address)
+    const accountResponse = await admin.graphql(`
     {
       shop {
         id
@@ -32,6 +32,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         myshopifyDomain
         metafield(namespace: "popsize", key: "accountCreated") {
           value
+        }
+        # accountOwner {
+        #   email
+        #   firstName
+        #   lastName
+        #   phone
+        # }
+        # requires read_users
+        billingAddress {
+          formatted
         }
       }
     }
@@ -46,9 +56,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const shopDomain = shop.primaryDomain?.host || "";
   const myshopifyDomain = shop.myshopifyDomain;
   const shopEmail = shop.email;
+  const accountOwner = shop.accountOwner || {};
+  const billingAddressFormatted = shop.billingAddress?.formatted || "";
 
   // If account not created, call backend and set metafield
-  if (!accountCreated) {
+    if (!accountCreated) {
     const apiResponse = await fetch(`${process.env.POPSIZE_B2B_API_URL}/partners/create_shopify_account/`, {
       method: "POST",
       headers: {
@@ -60,6 +72,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         shop_domains: [ shopDomain, myshopifyDomain ],
         shop_name: shopName,
         shop_email: shopEmail,
+        account_owner_email: accountOwner.email || "",
+        account_owner_firstName: accountOwner.firstName || "",
+        account_owner_lastName: accountOwner.lastName || "",
+        account_owner_phone: accountOwner.phone || "",
+        billing_address_formatted: billingAddressFormatted,
       }),
     });
 

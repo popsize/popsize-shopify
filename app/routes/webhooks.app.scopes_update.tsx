@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";

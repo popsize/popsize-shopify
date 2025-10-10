@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";

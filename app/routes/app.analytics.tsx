@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 // app/components/AppAnalytics.tsx
 import { Card, Text, Layout, Page, SkeletonBodyText, SkeletonDisplayText } from "@shopify/polaris";
 

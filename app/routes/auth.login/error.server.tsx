@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 import type { LoginError } from "@shopify/shopify-app-remix/server";
 import { LoginErrorType } from "@shopify/shopify-app-remix/server";
 

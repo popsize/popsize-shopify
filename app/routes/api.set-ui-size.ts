@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 import { json } from "@remix-run/node";
 import { authenticate } from "app/shopify.server";
 

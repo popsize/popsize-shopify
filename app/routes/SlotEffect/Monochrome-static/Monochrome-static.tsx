@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 import './Monochrome-static.css';
 import { useTranslation } from 'react-i18next';
 

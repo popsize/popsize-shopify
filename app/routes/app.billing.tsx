@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 // app/routes/app.billing.tsx
 import { Page, Layout, LegacyCard, Text } from "@shopify/polaris";
 import { useTranslation } from "react-i18next";

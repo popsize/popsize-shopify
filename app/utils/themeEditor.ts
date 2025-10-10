@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 /**
  * Utility function for opening Shopify admin pages with proper shop name resolution
  */

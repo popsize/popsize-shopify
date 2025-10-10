@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 // Shop Locale Detector for i18next
 // This plugin tries to get the locale from Shopify shop data before falling back to other detection methods
 

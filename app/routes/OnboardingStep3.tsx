@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 /* TO-DO: implement the widget embedding
 
 Continue button: make it inactive until, either: we successfully checked the widget is embedded (not sure it's possible)

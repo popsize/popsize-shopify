@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 import fs from "fs";
 import { LATEST_API_VERSION } from "@shopify/shopify-api";
 import { shopifyApiProject, ApiType } from "@shopify/api-codegen-preset";

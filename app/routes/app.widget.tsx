@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 // app/routes/app.widget.tsx
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { Page, Tabs, Text } from "@shopify/polaris";

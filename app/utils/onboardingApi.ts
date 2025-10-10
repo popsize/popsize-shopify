@@ -1,3 +1,6 @@
+// This code is licensed under the GNU Affero General Public License.
+// Author: Nicolas Micaux
+
 /**
  * Utility function for making onboarding API calls with proper shop name resolution
  */

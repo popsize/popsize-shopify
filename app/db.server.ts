@@ -1,8 +1,3 @@
-// ========================================
-// Author: Nicolas Micaux
-// Copyright (c) 2025 Popsize. All rights reserved.
-// ========================================
-
 import { PrismaClient } from "@prisma/client";
 
 declare global {

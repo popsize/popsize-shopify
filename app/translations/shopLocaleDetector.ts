@@ -1,8 +1,3 @@
-// ========================================
-// Author: Nicolas Micaux
-// Copyright (c) 2025 Popsize. All rights reserved.
-// ========================================
-
 // Shop Locale Detector for i18next
 // This plugin tries to get the locale from Shopify shop data before falling back to other detection methods
 

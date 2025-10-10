@@ -1,8 +1,3 @@
-// ========================================
-// Author: Nicolas Micaux
-// Copyright (c) 2025 Popsize. All rights reserved.
-// ========================================
-
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";

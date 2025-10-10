@@ -1,8 +1,3 @@
-// ========================================
-// Author: Nicolas Micaux
-// Copyright (c) 2025 Popsize. All rights reserved.
-// ========================================
-
 /* TO-DO: implement the widget embedding
 
 Continue button: make it inactive until, either: we successfully checked the widget is embedded (not sure it's possible)

@@ -1,8 +1,3 @@
-// ========================================
-// Author: Nicolas Micaux
-// Copyright (c) 2025 Popsize. All rights reserved.
-// ========================================
-
 // api/set-widget-style.ts
 import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";

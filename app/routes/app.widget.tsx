@@ -1,8 +1,3 @@
-// ========================================
-// Author: Nicolas Micaux
-// Copyright (c) 2025 Popsize. All rights reserved.
-// ========================================
-
 // app/routes/app.widget.tsx
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { Page, Tabs, Text } from "@shopify/polaris";

@@ -1,8 +1,3 @@
-// ========================================
-// Author: Nicolas Micaux
-// Copyright (c) 2025 Popsize. All rights reserved.
-// ========================================
-
 // app/routes/app.billing.tsx
 import { Page, Layout, LegacyCard, Text } from "@shopify/polaris";
 import { useTranslation } from "react-i18next";

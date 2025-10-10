@@ -1,8 +1,3 @@
-// ========================================
-// Author: Nicolas Micaux
-// Copyright (c) 2025 Popsize. All rights reserved.
-// ========================================
-
 import { useEffect, useRef } from 'react';
 import './SlotS-small.css';
 import { useTranslation } from 'react-i18next';

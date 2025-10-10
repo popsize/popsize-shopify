@@ -1,8 +1,3 @@
-// ========================================
-// Author: Nicolas Micaux
-// Copyright (c) 2025 Popsize. All rights reserved.
-// ========================================
-
 // app/components/AppAnalytics.tsx
 import { Card, Text, Layout, Page, SkeletonBodyText, SkeletonDisplayText } from "@shopify/polaris";
 

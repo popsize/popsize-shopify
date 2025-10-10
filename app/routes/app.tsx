@@ -1,3 +1,8 @@
+// ========================================
+// Author: Nicolas Micaux
+// Copyright (c) 2025 Popsize. All rights reserved.
+// ========================================
+
 // routes/app.tsx
 
 import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";

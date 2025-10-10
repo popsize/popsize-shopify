@@ -1,3 +1,8 @@
+// ========================================
+// Author: Nicolas Micaux
+// Copyright (c) 2025 Popsize. All rights reserved.
+// ========================================
+
 import './Monochrome-static.css';
 import { useTranslation } from 'react-i18next';
 

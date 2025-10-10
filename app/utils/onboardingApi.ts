@@ -1,3 +1,8 @@
+// ========================================
+// Author: Nicolas Micaux
+// Copyright (c) 2025 Popsize. All rights reserved.
+// ========================================
+
 /**
  * Utility function for making onboarding API calls with proper shop name resolution
  */

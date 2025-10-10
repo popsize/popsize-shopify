@@ -1,3 +1,8 @@
+// ========================================
+// Author: Nicolas Micaux
+// Copyright (c) 2025 Popsize. All rights reserved.
+// ========================================
+
 import "@shopify/shopify-app-remix/adapters/node";
 import {
   ApiVersion,

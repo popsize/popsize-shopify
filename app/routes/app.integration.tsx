@@ -1,3 +1,8 @@
+// ========================================
+// Author: Nicolas Micaux
+// Copyright (c) 2025 Popsize. All rights reserved.
+// ========================================
+
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";

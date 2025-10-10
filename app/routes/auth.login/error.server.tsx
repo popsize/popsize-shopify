@@ -1,3 +1,8 @@
+// ========================================
+// Author: Nicolas Micaux
+// Copyright (c) 2025 Popsize. All rights reserved.
+// ========================================
+
 import type { LoginError } from "@shopify/shopify-app-remix/server";
 import { LoginErrorType } from "@shopify/shopify-app-remix/server";
 

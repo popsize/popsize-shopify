@@ -5,6 +5,7 @@
 // This plugin tries to get the locale from Shopify shop data before falling back to other detection methods
 
 import type { LanguageDetectorModule } from 'i18next';
+import { debug, log, info } from '../utils/logger';
 
 // Store shop locale globally so it can be accessed by the detector
 let shopLocale: string | null = null;
@@ -25,10 +26,10 @@ const ShopLocaleDetector: LanguageDetectorModule = {
   detect() {
     // Return shop locale if available, otherwise return undefined to let other detectors handle it
     if (shopLocale) {
-      console.log('🌍 Using shop locale:', shopLocale);
+      log('🌍 Using shop locale:', shopLocale);
       return shopLocale;
     }
-    console.log('🌍 No shop locale found, falling back to browser detection');
+    log('🌍 No shop locale found, falling back to browser detection');
     return undefined;
   },
   

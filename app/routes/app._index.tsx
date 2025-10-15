@@ -18,6 +18,7 @@ import { authenticate } from "../shopify.server";
 import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
 import OnboardingStep3 from "./OnboardingStep3";
+import { debug, log, info } from '../utils/logger';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
@@ -138,7 +139,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   else if (widgetIntegration) initialStep = 2;
 
   const partnerId = `shopify:${shortShopId}`;
-  console.log("✅ Sending shopId to client:", partnerId);
+  log("✅ Sending shopId to client:", partnerId);
 
   return json({ initialStep, billing, shopId: partnerId, shopName, myshopifyDomain, apiUrl: process.env.POPSIZE_B2B_API_URL, apiB2bUrl: process.env.POPSIZE_B2B_API_URL });
 };
@@ -183,13 +184,13 @@ export default function OnboardingWizard() {
     }, 5000);
   };
 
-  console.log("🧠 OnboardingWizard rendered", { step, billingState });
+  log("🧠 OnboardingWizard rendered", { step, billingState });
 
   useEffect(() => {
     const fetchIsReady = async () => {
-      console.log("📤 Calling /partners/is_ready with partner_id:", shopId);
+      log("📤 Calling /partners/is_ready with partner_id:", shopId);
       try {
-        console.log("Using API URL:", apiUrl);
+        log("Using API URL:", apiUrl);
         const response = await fetch(`${apiUrl}/partners/is_ready`, {
           method: "POST",
           headers: {
@@ -202,10 +203,10 @@ export default function OnboardingWizard() {
         });
 
         const text = await response.text();
-        console.log("📥 Raw API response:", text);
+        log("📥 Raw API response:", text);
 
         const data = JSON.parse(text);
-        console.log("✅ Parsed response:", data);
+        log("✅ Parsed response:", data);
 
         setIsBrandReady(data.is_ready);
       } catch (error) {
@@ -217,7 +218,7 @@ export default function OnboardingWizard() {
     if (shopId) fetchIsReady();
   }, [shopId]);
 
-  console.log('FetchReady response: ', isBrandReady);
+  log('FetchReady response: ', isBrandReady);
 
   return (
     <Page fullWidth>

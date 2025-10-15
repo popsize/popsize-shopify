@@ -13,6 +13,7 @@ import { Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { authenticate } from "../shopify.server";
 import { setShopLocale } from "../translations/shopLocaleDetector";
+import { debug, log, info } from '../utils/logger';
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -36,13 +37,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       }
     `);
     const result = await response.json();
-    console.log('🌍 Shop data fetched successfully');
+    log('🌍 Shop data fetched successfully');
     
     // The content-language header contains the shop's locale
     const contentLanguage = response.headers?.get?.('content-language');
     if (contentLanguage) {
       shopLocale = contentLanguage;
-      console.log('🌍 Found shop locale from content-language header:', shopLocale);
+      log('🌍 Found shop locale from content-language header:', shopLocale);
     }
     
     // If no content-language header, we could also use currencyCode as a fallback
@@ -60,7 +61,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         'CHF': 'de',
       };
       shopLocale = currencyToLocaleMap[currencyCode] || 'en';
-      console.log('🌍 Inferred shop locale from currency:', shopLocale, 'from', currencyCode);
+      log('🌍 Inferred shop locale from currency:', shopLocale, 'from', currencyCode);
     }
     
   } catch (error) {
@@ -97,7 +98,7 @@ export default function App() {
   // Set shop locale for i18n detection when component mounts or shopLocale changes
   useEffect(() => {
     if (shopLocale) {
-      console.log('🌍 Setting shop locale for i18n:', shopLocale);
+      log('🌍 Setting shop locale for i18n:', shopLocale);
       setShopLocale(shopLocale);
       // Change language if it's different from current
       import('../translations/i18n').then(({ default: i18n }) => {

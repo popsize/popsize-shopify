@@ -3,6 +3,7 @@
 
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
+import { debug, log, info } from '../utils/logger';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
@@ -37,8 +38,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     // Log shop information for debugging
-    console.log("Shop Navigation Settings:", JSON.stringify(shopData.navigationSettings, null, 2));
-    console.log("Extracted Admin Base URL:", adminBaseUrl);
+    log("Shop Navigation Settings:", JSON.stringify(shopData.navigationSettings, null, 2));
+    log("Extracted Admin Base URL:", adminBaseUrl);
 
     return json({ 
       shop: shopData,

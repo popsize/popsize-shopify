@@ -1,6 +1,6 @@
 {% if shop.id %}
   <script
-    src="https://engine.popsize.ai/latest/button.js"
+    src="https://engine.popsize.ai/latest/button.js?t={{ "now" | date: "%Y%m%d%H%M%S" }}"
     defer
     data-partner-id="shopify:{{ shop.id }}"
     data-ui-size="{% if shop.metafields.popsize.ui_size %}{{ shop.metafields.popsize.ui_size }}{% else %}medium{% endif %}"
@@ -8,6 +8,7 @@
       data-customer-id="{{ customer.id }}"
       data-customer-email="{{ customer.email }}"
     {% endif %}
+    data-hello="world"
   ></script>
 {% endif %}
 

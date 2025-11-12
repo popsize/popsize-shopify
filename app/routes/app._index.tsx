@@ -6,11 +6,11 @@ import { json } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
-    Box,
-    Button,
-    Card,
-    Page,
-    Text,
+  Box,
+  Button,
+  Card,
+  Page,
+  Text,
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,6 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   // Helper function to create Shopify account
   const createShopifyAccount = async (shopData: any, apiBaseUrl: string) => {
+    console.log("🔵 [LOADER] Calling create_shopify_account with data:", shopData);
     const apiResponse = await fetch(`${apiBaseUrl}/partners/create_shopify_account/`, {
       method: "POST",
       headers: {
@@ -35,6 +36,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     });
 
     const apiJson = await apiResponse.json();
+    console.log("🟢 [LOADER] create_shopify_account response:", apiJson);
     return apiJson;
   };
 
@@ -64,8 +66,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   // Helper function to check if partner is ready
   const checkPartnerReady = async (partnerId: string, apiBaseUrl: string) => {
+    console.log("🔍 [LOADER] Checking if partner exists:", partnerId);
     try {
-      const response = await fetch(`${apiBaseUrl}/partners/is_ready`, {
+      const response = await fetch(`${apiBaseUrl}/partners/is_ready/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,21 +79,26 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         }),
       });
 
+      console.log("📡 [LOADER] is_ready response status:", response.status);
+
       if (response.status === 404) {
         // Partner not found
+        console.log("❌ [LOADER] Partner not found (404)");
         return { exists: false };
       }
 
       if (!response.ok) {
         // For non-404 errors (transient or server errors), do not force recreation of the account.
         // Return exists=true with is_ready=false so we don't revert the metafield on transient issues.
+        console.log("⚠️ [LOADER] Non-404 error, treating as exists=true");
         return { exists: true, is_ready: false };
       }
 
       const data = await response.json();
+      console.log("✅ [LOADER] Partner exists, is_ready:", data.is_ready);
       return { exists: true, is_ready: data.is_ready };
     } catch (error) {
-      console.error("❌ Error checking partner:", error);
+      console.error("❌ [LOADER] Error checking partner:", error);
       // On unexpected errors (network, timeouts), assume the partner still exists to avoid
       // flipping the metafield and causing repeated create attempts.
       return { exists: true, is_ready: false };
@@ -135,23 +143,33 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const myshopifyDomain = shop.myshopifyDomain;
   const shopEmail = shop.email;
   const accountOwner = shop.accountOwner || {};
-  const billingAddressFormatted = shop.billingAddress?.formatted || "";
+  const billingAddressFormatted = Array.isArray(shop.billingAddress?.formatted) 
+    ? shop.billingAddress.formatted.join(", ") 
+    : (shop.billingAddress?.formatted || "");
 
   const apiBaseUrl = process.env.POPSIZE_B2B_API_URL || 'https://popsize-api-b2b-1049592794130.europe-west9.run.app';
   const partnerId = `shopify:${shortShopId}`;
 
+  console.log("🏪 [LOADER] Shop info - partnerId:", partnerId, "accountCreated:", accountCreated);
+
   // Check if account is marked as created but partner doesn't exist in backend
   if (accountCreated) {
+    console.log("✔️ [LOADER] Account marked as created, verifying with backend...");
     const partnerCheck = await checkPartnerReady(partnerId, apiBaseUrl);
     if (!partnerCheck.exists) {
       // Partner doesn't exist in backend, revert accountCreated and recreate
+      console.log("🔄 [LOADER] Partner doesn't exist, reverting accountCreated metafield and will recreate");
       await setAccountCreatedMetafield(shopId, "false");
       accountCreated = false;
+      console.log("✅ [LOADER] accountCreated reverted to false, will now create account");
+    } else {
+      console.log("✅ [LOADER] Partner exists in backend, no action needed");
     }
   }
 
   // If account not created, call backend and set metafield
   if (!accountCreated) {
+    console.log("📝 [LOADER] Account not created (accountCreated=false), proceeding with account creation...");
     const shopData = {
       shop_id: shortShopId,
       shop_domains: [shopDomain, myshopifyDomain],
@@ -164,11 +182,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       billing_address_formatted: billingAddressFormatted,
     };
 
-    const apiJson = await createShopifyAccount(shopData, apiBaseUrl);
-    if (apiJson.status_code === 201 && apiJson.message === "Account created successfully.") {
-      // Set accountCreated metafield to true
-      await setAccountCreatedMetafield(shopId, "true");
+    try {
+      const apiJson = await createShopifyAccount(shopData, apiBaseUrl);
+      if (apiJson.status_code === 201 && apiJson.message === "Account created successfully.") {
+        // Set accountCreated metafield to true
+        console.log("🎉 [LOADER] Account created successfully, setting metafield to true");
+        await setAccountCreatedMetafield(shopId, "true");
+      } else {
+        console.log("⚠️ [LOADER] Account creation returned unexpected response:", apiJson);
+      }
+    } catch (error) {
+      console.error("❌ [LOADER] Error creating account:", error);
     }
+  } else {
+    console.log("ℹ️ [LOADER] Account already exists, skipping creation");
   }
 
   const response = await admin.graphql(`
@@ -232,9 +259,17 @@ export default function OnboardingWizard() {
   };
 
   useEffect(() => {
+    // Only fetch is_ready status on client side when billing is complete
+    // During onboarding, we don't need to show the status
+    if (!isBillingComplete) {
+      console.log("ℹ️ [CLIENT] Billing not complete, skipping is_ready check");
+      return;
+    }
+
     const fetchIsReady = async () => {
       try {
-        const response = await fetch(`${apiUrl}/partners/is_ready`, {
+        console.log("🔍 [CLIENT] Fetching is_ready status for:", shopId);
+        const response = await fetch(`${apiUrl}/partners/is_ready/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -245,10 +280,14 @@ export default function OnboardingWizard() {
           }),
         });
 
+        console.log("📡 [CLIENT] is_ready response status:", response.status);
+
         if (response.status === 404) {
-          // Partner not found - this should trigger a page reload to recreate the account
-          console.log("❌ Partner not found, reloading page to recreate account");
-          window.location.reload();
+          // Partner not found - the loader should have already handled recreation
+          // Just show "not ready" status and let the system resolve it
+          console.log("❌ [CLIENT] Partner not found (404), setting status to 'not ready'");
+          console.log("ℹ️ [CLIENT] Loader should have already initiated account recreation");
+          setIsBrandReady(false);
           return;
         }
 
@@ -257,20 +296,20 @@ export default function OnboardingWizard() {
         }
 
         const text = await response.text();
-        log("📥 Raw API response:", text);
+        log("📥 [CLIENT] Raw API response:", text);
 
         const data = JSON.parse(text);
-        log("✅ Parsed response:", data);
+        log("✅ [CLIENT] Parsed response:", data);
 
         setIsBrandReady(data.is_ready);
       } catch (error) {
-        console.error("❌ Error in fetchIsReady:", error);
+        console.error("❌ [CLIENT] Error in fetchIsReady:", error);
         setIsBrandReady(false);
       }
     };
 
     if (shopId) fetchIsReady();
-  }, [shopId, apiUrl]);
+  }, [shopId, apiUrl, isBillingComplete]);
 
   log('FetchReady response: ', isBrandReady);
 

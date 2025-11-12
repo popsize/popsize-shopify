@@ -6,11 +6,11 @@ import { json } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { TitleBar } from "@shopify/app-bridge-react";
 import {
-  Box,
-  Button,
-  Card,
-  Page,
-  Text,
+    Box,
+    Button,
+    Card,
+    Page,
+    Text,
 } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -23,8 +23,82 @@ import OnboardingStep3 from "./OnboardingStep3";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
 
+  // Helper function to create Shopify account
+  const createShopifyAccount = async (shopData: any, apiBaseUrl: string) => {
+    const apiResponse = await fetch(`${apiBaseUrl}/partners/create_shopify_account/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(shopData),
+    });
+
+    const apiJson = await apiResponse.json();
+    return apiJson;
+  };
+
+  // Helper function to set accountCreated metafield
+  const setAccountCreatedMetafield = async (shopId: string, value: string) => {
+    await admin.graphql(`
+      mutation {
+        metafieldsSet(metafields: [{
+          namespace: "popsize",
+          key: "accountCreated",
+          type: "single_line_text_field",
+          value: "${value}",
+          ownerId: "${shopId}"
+        }]) {
+          metafields {
+            id
+            value
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `);
+  };
+
+  // Helper function to check if partner is ready
+  const checkPartnerReady = async (partnerId: string, apiBaseUrl: string) => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/partners/is_ready`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          partner_id: partnerId,
+        }),
+      });
+
+      if (response.status === 404) {
+        // Partner not found
+        return { exists: false };
+      }
+
+      if (!response.ok) {
+        // For non-404 errors (transient or server errors), do not force recreation of the account.
+        // Return exists=true with is_ready=false so we don't revert the metafield on transient issues.
+        return { exists: true, is_ready: false };
+      }
+
+      const data = await response.json();
+      return { exists: true, is_ready: data.is_ready };
+    } catch (error) {
+      console.error("❌ Error checking partner:", error);
+      // On unexpected errors (network, timeouts), assume the partner still exists to avoid
+      // flipping the metafield and causing repeated create attempts.
+      return { exists: true, is_ready: false };
+    }
+  };
+
   // Fetch accountCreated metafield and shop info (including accountOwner and billing address)
-    const accountResponse = await admin.graphql(`
+  const accountResponse = await admin.graphql(`
     {
       shop {
         id
@@ -53,7 +127,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const accountJson = await accountResponse.json();
   const shop = accountJson.data.shop;
-  const accountCreated = shop.metafield?.value === "true";
+  let accountCreated = shop.metafield?.value === "true";
   const shopId = shop.id;
   const shortShopId = shopId.split("/").pop();
   const shopName = shop.name;
@@ -63,51 +137,37 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const accountOwner = shop.accountOwner || {};
   const billingAddressFormatted = shop.billingAddress?.formatted || "";
 
-  // If account not created, call backend and set metafield
-    if (!accountCreated) {
-    const apiBaseUrl = process.env.POPSIZE_B2B_API_URL || 'https://popsize-api-b2b-1049592794130.europe-west9.run.app';
-    const apiResponse = await fetch(`${apiBaseUrl}/partners/create_shopify_account/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        shop_id: shortShopId,
-        shop_domains: [ shopDomain, myshopifyDomain ],
-        shop_name: shopName,
-        shop_email: shopEmail,
-        account_owner_email: accountOwner.email || "",
-        account_owner_firstName: accountOwner.firstName || "",
-        account_owner_lastName: accountOwner.lastName || "",
-        account_owner_phone: accountOwner.phone || "",
-        billing_address_formatted: billingAddressFormatted,
-      }),
-    });
+  const apiBaseUrl = process.env.POPSIZE_B2B_API_URL || 'https://popsize-api-b2b-1049592794130.europe-west9.run.app';
+  const partnerId = `shopify:${shortShopId}`;
 
-    const apiJson = await apiResponse.json();
+  // Check if account is marked as created but partner doesn't exist in backend
+  if (accountCreated) {
+    const partnerCheck = await checkPartnerReady(partnerId, apiBaseUrl);
+    if (!partnerCheck.exists) {
+      // Partner doesn't exist in backend, revert accountCreated and recreate
+      await setAccountCreatedMetafield(shopId, "false");
+      accountCreated = false;
+    }
+  }
+
+  // If account not created, call backend and set metafield
+  if (!accountCreated) {
+    const shopData = {
+      shop_id: shortShopId,
+      shop_domains: [shopDomain, myshopifyDomain],
+      shop_name: shopName,
+      shop_email: shopEmail,
+      account_owner_email: accountOwner.email || "",
+      account_owner_firstName: accountOwner.firstName || "",
+      account_owner_lastName: accountOwner.lastName || "",
+      account_owner_phone: accountOwner.phone || "",
+      billing_address_formatted: billingAddressFormatted,
+    };
+
+    const apiJson = await createShopifyAccount(shopData, apiBaseUrl);
     if (apiJson.status_code === 201 && apiJson.message === "Account created successfully.") {
       // Set accountCreated metafield to true
-      await admin.graphql(`
-        mutation {
-          metafieldsSet(metafields: [{
-            namespace: "popsize",
-            key: "accountCreated",
-            type: "single_line_text_field",
-            value: "true",
-            ownerId: "${shopId}"
-          }]) {
-            metafields {
-              id
-              value
-            }
-            userErrors {
-              field
-              message
-            }
-          }
-        }
-      `);
+      await setAccountCreatedMetafield(shopId, "true");
     }
   }
 
@@ -139,8 +199,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   else if (widgetIntegration && widgetPlacement) initialStep = 3;
   else if (widgetIntegration) initialStep = 2;
 
-  const partnerId = `shopify:${shortShopId}`;
-  const apiBaseUrl = process.env.POPSIZE_B2B_API_URL || 'https://popsize-api-b2b-1049592794130.europe-west9.run.app';
   log("✅ Sending shopId to client:", partnerId);
 
   return json({ initialStep, billing, shopId: partnerId, shopName, myshopifyDomain, apiUrl: apiBaseUrl, apiB2bUrl: apiBaseUrl });
@@ -156,9 +214,6 @@ export default function OnboardingWizard() {
   const navigate = useNavigate();
 
   const isBillingComplete = billingState || billing;
-
-  const [showCompleteStep, setShowCompleteStep] = useState(false);
-  const [showFinalScreen, setShowFinalScreen] = useState(false);
   const [isBrandReady, setIsBrandReady] = useState<boolean | null>(null);
 
   const TOTAL_STEPS = 3;
@@ -176,23 +231,9 @@ export default function OnboardingWizard() {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleCompleteAndShowFinal = () => {
-    setBillingState(true);         // show "You're all set!"
-    setShowCompleteStep(true);
-
-    setTimeout(() => {
-      setShowCompleteStep(false);  // hide "You're all set!"
-      setShowFinalScreen(true);    // show "test popsize"
-    }, 5000);
-  };
-
-  log("🧠 OnboardingWizard rendered", { step, billingState });
-
   useEffect(() => {
     const fetchIsReady = async () => {
-      log("📤 Calling /partners/is_ready with partner_id:", shopId);
       try {
-        log("Using API URL:", apiUrl);
         const response = await fetch(`${apiUrl}/partners/is_ready`, {
           method: "POST",
           headers: {
@@ -203,6 +244,17 @@ export default function OnboardingWizard() {
             partner_id: shopId,
           }),
         });
+
+        if (response.status === 404) {
+          // Partner not found - this should trigger a page reload to recreate the account
+          console.log("❌ Partner not found, reloading page to recreate account");
+          window.location.reload();
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const text = await response.text();
         log("📥 Raw API response:", text);
@@ -218,7 +270,7 @@ export default function OnboardingWizard() {
     };
 
     if (shopId) fetchIsReady();
-  }, [shopId]);
+  }, [shopId, apiUrl]);
 
   log('FetchReady response: ', isBrandReady);
 

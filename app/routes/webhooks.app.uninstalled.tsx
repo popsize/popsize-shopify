@@ -8,7 +8,8 @@ import { authenticate } from "../shopify.server";
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { shop, session, topic } = await authenticate.webhook(request);
 
-  await fetch(`${process.env.POPSIZE_B2B_API_URL}/partners/uninstall_shopify_account/`, {
+  const apiBaseUrl = process.env.POPSIZE_B2B_API_URL || 'https://popsize-api-b2b-1049592794130.europe-west9.run.app';
+  await fetch(`${apiBaseUrl}/partners/uninstall_shopify_account/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

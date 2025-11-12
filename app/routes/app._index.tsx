@@ -15,10 +15,10 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { authenticate } from "../shopify.server";
+import { log } from '../utils/logger';
 import OnboardingStep1 from "./OnboardingStep1";
 import OnboardingStep2 from "./OnboardingStep2";
 import OnboardingStep3 from "./OnboardingStep3";
-import { debug, log, info } from '../utils/logger';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
@@ -65,7 +65,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   // If account not created, call backend and set metafield
     if (!accountCreated) {
-    const apiResponse = await fetch(`${process.env.POPSIZE_B2B_API_URL}/partners/create_shopify_account/`, {
+    const apiBaseUrl = process.env.POPSIZE_B2B_API_URL || 'https://popsize-api-b2b-1049592794130.europe-west9.run.app';
+    const apiResponse = await fetch(`${apiBaseUrl}/partners/create_shopify_account/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -139,9 +140,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   else if (widgetIntegration) initialStep = 2;
 
   const partnerId = `shopify:${shortShopId}`;
+  const apiBaseUrl = process.env.POPSIZE_B2B_API_URL || 'https://popsize-api-b2b-1049592794130.europe-west9.run.app';
   log("✅ Sending shopId to client:", partnerId);
 
-  return json({ initialStep, billing, shopId: partnerId, shopName, myshopifyDomain, apiUrl: process.env.POPSIZE_B2B_API_URL, apiB2bUrl: process.env.POPSIZE_B2B_API_URL });
+  return json({ initialStep, billing, shopId: partnerId, shopName, myshopifyDomain, apiUrl: apiBaseUrl, apiB2bUrl: apiBaseUrl });
 };
 
 
